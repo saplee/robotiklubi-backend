@@ -1,0 +1,28 @@
+stages:
+  - build
+  - deploy
+build robotiklubi-backend:
+  stage: build
+  only:
+    refs:
+      - master
+  tags:
+    - main
+  script:
+    - ./mvnw package
+    - docker build -t robotiklubi-backend .
+
+deploy robotiklubi-backend:
+  stage: deploy
+  only:
+    refs:
+      - master
+  tags:
+    - main
+  script:
+    - cd /opt/database
+    - docker-compose down
+    - docker-compose up -d
+    - cd /opt/backend
+    - docker-compose down
+    - docker-compose up -d
