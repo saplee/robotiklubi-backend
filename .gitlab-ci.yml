@@ -5,7 +5,7 @@ build robotiklubi-backend:
   stage: build
   only:
     refs:
-      - master
+      - main
   tags:
     - main
   script:
@@ -16,7 +16,7 @@ deploy robotiklubi-backend:
   stage: deploy
   only:
     refs:
-      - master
+      - main
   tags:
     - main
   script:
