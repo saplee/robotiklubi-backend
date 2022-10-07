@@ -1,10 +1,8 @@
 package ee.taltech.iti0302.robotiklubi.repository;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
