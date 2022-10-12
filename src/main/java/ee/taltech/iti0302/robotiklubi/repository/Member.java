@@ -2,6 +2,7 @@ package ee.taltech.iti0302.robotiklubi.repository;
 
 import javax.persistence.*;
 
+@Table(name = "clients")
 @Entity
 public class Member {
     @Id
