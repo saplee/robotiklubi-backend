@@ -20,9 +20,9 @@ deploy robotiklubi-backend:
   tags:
     - main
   script:
-    - cd /opt/database
+    - cd /opt/robotiklubi/database
     - docker-compose down
     - docker-compose up -d
-    - cd /opt/backend
+    - cd /opt/robotiklubi/backend
     - docker-compose down
     - docker-compose up -d
