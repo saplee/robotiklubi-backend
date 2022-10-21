@@ -38,11 +38,23 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="2" author="mloomets">
+    <changeSet author="mloomets" id="2">
         <sql>
             INSERT INTO roles (description) VALUES ('admin');
             INSERT INTO roles (description) VALUES ('user');
         </sql>
+    </changeSet>
+
+    <changeSet id="3" author="mloomets">
+        <createTable tableName="clients">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true" />
+            </column>
+            <column name="first_name" type="char(50)"/>
+            <column name="last_name" type="char(50)" />
+            <column name="mail" type="char(100)" />
+            <column name="phone" type="char(20)" />
+        </createTable>
     </changeSet>
 
 
