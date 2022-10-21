@@ -38,7 +38,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="mloomets" id="2">
+    <changeSet id="2" author="mloomets">
         <sql>
             INSERT INTO roles (description) VALUES ('admin');
             INSERT INTO roles (description) VALUES ('user');
