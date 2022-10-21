@@ -45,5 +45,17 @@
         </sql>
     </changeSet>
 
+    <changeSet id="3" author="mloomets">
+        <createTable tableName="clients">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true" />
+            </column>
+            <column name="first_name" type="char(50)"/>
+            <column name="last_name" type="char(50)" />
+            <column name="mail" type="char(100)" />
+            <column name="phone" type="char(20)" />
+        </createTable>
+    </changeSet>
+
 
 </databaseChangeLog>
