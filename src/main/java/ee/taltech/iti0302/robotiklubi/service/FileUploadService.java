@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 public class FileUploadService {
 
     public String saveToDisk(MultipartFile file) throws IOException {
-        File localFile = new File(Paths.get("").toAbsolutePath() + "\\uploads\\" + file.getOriginalFilename());
+        File localFile = new File(Paths.get("").toAbsolutePath() + "/uploads/" + file.getOriginalFilename());
         String fileName  = file.getOriginalFilename();
         int fileLength = file.getBytes().length;
         file.transferTo(localFile);
