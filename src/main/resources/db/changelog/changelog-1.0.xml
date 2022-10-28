@@ -57,5 +57,27 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="4" author="rviirlaid">
+        <createTable tableName="wiki">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true" />
+            </column>
+            <column name="title" type="char(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="content" type="text" >
+                <constraints nullable="false" />
+            </column>
+            <column name="author" type="int" >
+                <constraints foreignKeyName="fk_users_wiki_author" referencedTableName="users" referencedColumnNames="id"/>
+            </column>
+            <column name="created_at" type="timestamptz" />
+            <column name="last_edited" type="timestamptz" />
+        </createTable>
+        <sql>
+            ALTER SEQUENCE clients_id_seq RESTART WITH 84680;
+        </sql>
+    </changeSet>
+
 
 </databaseChangeLog>
