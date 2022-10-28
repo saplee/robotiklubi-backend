@@ -79,5 +79,11 @@
         </sql>
     </changeSet>
 
+    <changeSet id="5" author="rviirlaid">
+        <sql>
+            ALTER SEQUENCE wiki_id_seq RESTART WITH 84680;
+        </sql>
+    </changeSet>
+
 
 </databaseChangeLog>
