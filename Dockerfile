@@ -9,5 +9,5 @@ ADD PrinterConfigs/RobotiklubiConf.def.json /opt/Cura/resources/definitions/Robo
 
 RUN apt-get install openjdk-17-jre -y
 
-ADD target/robotiklubi-0.0.1-SNAPSHOT.jar /app/app.jar
-CMD java -Dspring.config.location=classpath:/application.properties,file:/app/application.properties -jar /app/app.jar
+# ADD target/robotiklubi-0.0.1-SNAPSHOT.jar /app/app.jar
+# CMD java -Dspring.config.location=classpath:/application.properties,file:/app/application.properties -jar /app/app.jar

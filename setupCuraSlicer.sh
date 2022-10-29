@@ -1,6 +1,6 @@
 #!/bin/bash
-apt update && apt upgrade
-apt install wget build-essential libncursesw5-dev -y
+apt update && apt upgrade -y
+apt install wget build-essential libncursesw5-dev apt-utils -y
 apt install openjdk-17-jre -y
 
 # Python
@@ -21,7 +21,7 @@ fi
 # CMAKE
 if [ ! -d "/opt/cmake-3.25.0-rc2" ]
 then
-  apt install libssl-dev -y
+  apt install libssl-dev apt-utils -y
   cd /opt || return 1
   wget https://github.com/Kitware/CMake/releases/download/v3.25.0-rc2/cmake-3.25.0-rc2.tar.gz
   tar -xf cmake-3.25.0-rc2.tar.gz
@@ -37,7 +37,7 @@ fi
 if [ ! -d "/opt/CuraEngine" ]
   then
   cd opt || return 1
-  apt install python3-pip -y
+  apt install python3-pip apt-utils -y
   apt install git ninja-build -y
   pip3 install conan --upgrade
   conan config install https://github.com/ultimaker/conan-config.git
@@ -49,17 +49,16 @@ if [ ! -d "/opt/CuraEngine" ]
   cmake --preset release
   cmake --build --preset release
   . build/generators/conanrun.sh
+  ln -s /opt/CuraEngine/build/Release/CuraEngine /usr/bin/curaengine
   cd /
 fi
 
-## Simlink
-ln -s "/opt/build/Release/CuraEngine" /usr/bin/CuraEngine
 
 # Cura
 if [ ! -d "/opt/Cura" ]
 then
   cd opt || return 1
-  git clone https://github.com/Ultimaker/Cura.git
+  wget clone https://github.com/Ultimaker/Cura.git
   cp ./Cura/resources/extruders/creality_base_extruder_0.def.json ./Cura/resources/definitions/
   cd /
 fi
