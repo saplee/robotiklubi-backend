@@ -87,17 +87,16 @@
 
     <changeSet id="6" author="rviirlaid">
         <sql>
-            ALTER SEQUENCE users_id_seq RESTART WITH 1;
-            ALTER TABLE users ADD bio text;
+            ALTER SEQUENCE clients_id_seq RESTART WITH 1;
             ALTER TABLE users ADD is_admin bool;
-
-            UPDATE public.roles
-            SET description = 'member'
-            WHERE id = 2;
 
             UPDATE public.roles
             SET description = 'user'
             WHERE id = 1;
+
+            UPDATE public.roles
+            SET description = 'member'
+            WHERE id = 2;
 
             INSERT INTO public.roles (description)
             VALUES ('former member');

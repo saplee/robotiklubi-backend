@@ -8,7 +8,6 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String userName;
-    private String bio;
     private String email;
     private String phone;
 }
