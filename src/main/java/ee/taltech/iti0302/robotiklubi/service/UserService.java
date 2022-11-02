@@ -31,6 +31,7 @@ public class UserService {
     public SignUpResponseDto addUser(User user) {
         SignUpResponseDto signUpResponseDto = new SignUpResponseDto();
         userRepository.save(user);
+        signUpResponseDto.setSucceeded(true);
         return signUpResponseDto;
     }
 }
