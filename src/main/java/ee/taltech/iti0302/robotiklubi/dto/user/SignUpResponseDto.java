@@ -5,8 +5,5 @@ import lombok.Data;
 @Data
 public class SignUpResponseDto {
     boolean succeeded = false;
-
-    boolean userNameError = false;
-
     boolean emailError = false;
 }

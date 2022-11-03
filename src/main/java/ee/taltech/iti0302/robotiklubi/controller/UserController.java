@@ -38,6 +38,7 @@ public class UserController {
     public SignUpResponseDto registerUser(@RequestBody User user) {
         return userService.addUser(user);
     }
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurerAdapter() {

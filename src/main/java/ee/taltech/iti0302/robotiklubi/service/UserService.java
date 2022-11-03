@@ -30,8 +30,22 @@ public class UserService {
 
     public SignUpResponseDto addUser(User user) {
         SignUpResponseDto signUpResponseDto = new SignUpResponseDto();
-        userRepository.save(user);
-        signUpResponseDto.setSucceeded(true);
+        user.setRole(1);
+        user.setIsAdmin(false);
+        user.setEmail(user.getEmail().toLowerCase());
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            signUpResponseDto.setSucceeded(false);
+            signUpResponseDto.setEmailError(true);
+        } else {
+            try {
+                userRepository.save(user);
+                signUpResponseDto.setSucceeded(true);
+                signUpResponseDto.setEmailError(false);
+            } catch (Exception exception) {
+                signUpResponseDto.setSucceeded(false);
+                signUpResponseDto.setEmailError(false);
+            }
+        }
         return signUpResponseDto;
     }
 }
