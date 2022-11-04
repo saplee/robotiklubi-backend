@@ -97,6 +97,18 @@
             VALUES ('management');
         </sql>
     </changeSet>
+    <changeSet id="04.11.2022spleesi1" author="spleesi">
+        <sql>
+            ALTER TABLE users
+            ADD UNIQUE (email);
+        </sql>
+    </changeSet>
+    <changeSet id="04.11.2022spleesi2" author="spleesi">
+        <sql>
+            ALTER TABLE users
+            DROP COLUMN username;
+        </sql>
+    </changeSet>
 
 
 </databaseChangeLog>
