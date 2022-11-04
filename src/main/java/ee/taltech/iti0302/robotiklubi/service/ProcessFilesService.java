@@ -32,7 +32,8 @@ public class ProcessFilesService {
             file.transferTo(localFile);
 
             Runtime rt = Runtime.getRuntime();
-            Process pr = rt.exec("curaengine slice -j /opt/Cura/resources/definitions/RobotiklubiConf.def.json -s roofing_layer_count=2 -s roofing_monotonic=true" + " -l " + uploadsFolder + fileName + " -o " + uploadsFolder + gcodeFileName);
+            String[] command = {"curaengine slice -j /opt/Cura/resources/definitions/RobotiklubiConf.def.json -s roofing_layer_count=2 -s roofing_monotonic=true" + " -l " + uploadsFolder + fileName + " -o " + uploadsFolder + gcodeFileName};
+            Process pr = rt.exec(command);
 
             logOutputs(pr);
         } catch (Exception e) {
