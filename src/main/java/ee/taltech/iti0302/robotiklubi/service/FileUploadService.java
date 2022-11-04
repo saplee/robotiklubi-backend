@@ -3,10 +3,12 @@ package ee.taltech.iti0302.robotiklubi.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+@Transactional
 @Service
 public class FileUploadService {
 

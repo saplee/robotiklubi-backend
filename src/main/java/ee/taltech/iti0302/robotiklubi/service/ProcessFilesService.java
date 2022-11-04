@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -12,11 +13,12 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class ProcessFilesService {
 
-    Logger logger = Logger.getLogger("ProcessFilesService");
+    private final Logger logger = Logger.getLogger("ProcessFilesService");
 
     public void processFiles(MultipartFile file) {
         try {
@@ -32,7 +34,9 @@ public class ProcessFilesService {
             file.transferTo(localFile);
 
             Runtime rt = Runtime.getRuntime();
-            String[] command = {"curaengine slice -j /opt/Cura/resources/definitions/RobotiklubiConf.def.json -s roofing_layer_count=2 -s roofing_monotonic=true" + " -l " + uploadsFolder + fileName + " -o " + uploadsFolder + gcodeFileName};
+            String[] command = {"curaengine slice -j /opt/Cura/resources/definitions/RobotiklubiConf.def.json -s" +
+                    " roofing_layer_count=2 -s roofing_monotonic=true" + " -l " + uploadsFolder + fileName + " -o " +
+                    uploadsFolder + gcodeFileName};
             Process pr = rt.exec(command);
 
             logOutputs(pr);

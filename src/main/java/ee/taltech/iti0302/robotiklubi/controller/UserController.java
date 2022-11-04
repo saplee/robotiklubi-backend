@@ -2,7 +2,6 @@ package ee.taltech.iti0302.robotiklubi.controller;
 
 import ee.taltech.iti0302.robotiklubi.dto.user.UserDto;
 import ee.taltech.iti0302.robotiklubi.service.UserService;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +12,7 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    @NonNull
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("/users/members")
     public List<UserDto> getAllRegularClubMembers() {
