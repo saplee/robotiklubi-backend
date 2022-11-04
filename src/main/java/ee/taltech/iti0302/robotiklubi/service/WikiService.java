@@ -4,20 +4,19 @@ import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMapper;
 import ee.taltech.iti0302.robotiklubi.repository.WikiPage;
 import ee.taltech.iti0302.robotiklubi.repository.WikiRepository;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class WikiService {
 
-    @NonNull
-    private WikiRepository wikiRepository;
-    @NonNull
-    private WikiPageMapper wikiPageMapper;
+    private final WikiRepository wikiRepository;
+    private final WikiPageMapper wikiPageMapper;
 
     public WikiPageDto getPageById(Long id) {
         Optional<WikiPage> pageOptional = wikiRepository.findById(id);

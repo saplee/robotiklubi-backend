@@ -1,8 +1,6 @@
 package ee.taltech.iti0302.robotiklubi.controller;
 
-import ee.taltech.iti0302.robotiklubi.service.FileUploadService;
 import ee.taltech.iti0302.robotiklubi.service.ProcessFilesService;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,10 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class FileProcessorController {
 
-    @NonNull
-    ProcessFilesService processFilesService;
-    @NonNull
-    FileUploadService fileUploadService;
+    private final ProcessFilesService processFilesService;
 
     @PostMapping("/process")
     public String processFiles(@RequestParam("file") MultipartFile file) {
