@@ -5,9 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet author="mloomets" id="1">
+    <changeSet id="04.11.2022 mloomets 1" author="mloomets">
         <createTable tableName="roles">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="id" type="serial">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="description" type="varchar(50)">
@@ -15,7 +15,7 @@
             </column>
         </createTable>
         <createTable  tableName="users">
-            <column  name="id"  type="int"  autoIncrement="true">
+            <column  name="id"  type="serial">
                 <constraints  primaryKey="true"  nullable="false" unique="true"/>
             </column>
             <column  name="firstname"  type="varchar(50)">
@@ -24,13 +24,12 @@
             <column  name="lastname"  type="varchar(50)">
                 <constraints  nullable="false"/>
             </column>
-            <column  name="username"  type="char(50)">
-                <constraints  nullable="false"/>
-            </column>
             <column  name="password"  type="char(50)">
                 <constraints  nullable="false"/>
             </column>
-            <column  name="email"  type="char(50)"/>
+            <column  name="email"  type="char(50)" >
+                <constraints  unique="true" nullable="false"/>
+            </column>
             <column  name="phone"  type="char(20)"/>
             <column  name="role"  type="int">
                 <constraints  nullable="false" foreignKeyName="fk_roles_user_accounts" referencedTableName="roles" referencedColumnNames="id"/>
@@ -38,16 +37,16 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="2" author="mloomets">
+    <changeSet id="04.11.2022 mloomets 2" author="mloomets">
         <sql>
             INSERT INTO roles (description) VALUES ('admin');
             INSERT INTO roles (description) VALUES ('user');
         </sql>
     </changeSet>
 
-    <changeSet id="3" author="mloomets">
+    <changeSet id="04.11.2022 mloomets 3" author="mloomets">
         <createTable tableName="clients">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="id" type="serial">
                 <constraints primaryKey="true" nullable="false" unique="true" />
             </column>
             <column name="first_name" type="char(50)"/>
@@ -57,9 +56,9 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="4" author="rviirlaid">
+    <changeSet id="04.11.2022 rviirlaid 1" author="rviirlaid">
         <createTable tableName="wiki">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="id" type="serial">
                 <constraints primaryKey="true" nullable="false" unique="true" />
             </column>
             <column name="title" type="char(50)">
@@ -75,19 +74,12 @@
             <column name="last_edited" type="timestamptz" />
         </createTable>
         <sql>
-            ALTER SEQUENCE clients_id_seq RESTART WITH 84680;
-        </sql>
-    </changeSet>
-
-    <changeSet id="5" author="rviirlaid">
-        <sql>
             ALTER SEQUENCE wiki_id_seq RESTART WITH 84680;
         </sql>
     </changeSet>
 
-    <changeSet id="6" author="rviirlaid">
+    <changeSet id="04.11.2022 rviirlaid 2" author="rviirlaid">
         <sql>
-            ALTER SEQUENCE clients_id_seq RESTART WITH 1;
             ALTER TABLE users ADD is_admin bool;
 
             UPDATE public.roles
