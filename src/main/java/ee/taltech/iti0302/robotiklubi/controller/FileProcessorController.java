@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @RequiredArgsConstructor
 @RestController
 public class FileProcessorController {
@@ -21,8 +19,7 @@ public class FileProcessorController {
     FileUploadService fileUploadService;
 
     @PostMapping("/process")
-    public String processFiles(@RequestParam("file") MultipartFile file) throws IOException {
-        fileUploadService.saveToDisk(file);
+    public String processFiles(@RequestParam("file") MultipartFile file) {
         processFilesService.processFiles(file);
         return "Done process";
     }
