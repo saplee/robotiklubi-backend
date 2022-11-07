@@ -14,64 +14,68 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createTable  tableName="users">
-            <column  name="id"  type="serial">
-                <constraints  primaryKey="true"  nullable="false" unique="true"/>
+        <createTable tableName="users">
+            <column name="id" type="serial">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
-            <column  name="firstname"  type="varchar(50)">
-                <constraints  nullable="false"/>
+            <column name="firstname" type="varchar(50)">
+                <constraints nullable="false"/>
             </column>
-            <column  name="lastname"  type="varchar(50)">
-                <constraints  nullable="false"/>
+            <column name="lastname" type="varchar(50)">
+                <constraints nullable="false"/>
             </column>
-            <column  name="password"  type="char(50)">
-                <constraints  nullable="false"/>
+            <column name="password" type="char(50)">
+                <constraints nullable="false"/>
             </column>
-            <column  name="email"  type="char(50)" >
-                <constraints  unique="true" nullable="false"/>
+            <column name="email" type="char(50)">
+                <constraints unique="true" nullable="false"/>
             </column>
-            <column  name="phone"  type="char(20)"/>
-            <column  name="role"  type="int">
-                <constraints  nullable="false" foreignKeyName="fk_roles_user_accounts" referencedTableName="roles" referencedColumnNames="id"/>
+            <column name="phone" type="char(20)"/>
+            <column name="role" type="int">
+                <constraints nullable="false" foreignKeyName="fk_roles_user_accounts" referencedTableName="roles"
+                             referencedColumnNames="id"/>
             </column>
         </createTable>
     </changeSet>
 
     <changeSet id="04.11.2022 mloomets 2" author="mloomets">
         <sql>
-            INSERT INTO roles (description) VALUES ('admin');
-            INSERT INTO roles (description) VALUES ('user');
+            INSERT INTO roles (description)
+            VALUES ('admin');
+            INSERT INTO roles (description)
+            VALUES ('user');
         </sql>
     </changeSet>
 
     <changeSet id="04.11.2022 mloomets 3" author="mloomets">
         <createTable tableName="clients">
             <column name="id" type="serial">
-                <constraints primaryKey="true" nullable="false" unique="true" />
+                <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="first_name" type="char(50)"/>
-            <column name="last_name" type="char(50)" />
-            <column name="mail" type="char(100)" />
-            <column name="phone" type="char(20)" />
+            <column name="last_name" type="char(50)"/>
+            <column name="mail" type="char(100)"/>
+            <column name="phone" type="char(20)"/>
         </createTable>
     </changeSet>
 
     <changeSet id="04.11.2022 rviirlaid 1" author="rviirlaid">
         <createTable tableName="wiki">
             <column name="id" type="serial">
-                <constraints primaryKey="true" nullable="false" unique="true" />
+                <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="title" type="char(50)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
-            <column name="content" type="text" >
-                <constraints nullable="false" />
+            <column name="content" type="text">
+                <constraints nullable="false"/>
             </column>
-            <column name="author" type="int" >
-                <constraints foreignKeyName="fk_users_wiki_author" referencedTableName="users" referencedColumnNames="id"/>
+            <column name="author" type="int">
+                <constraints foreignKeyName="fk_users_wiki_author" referencedTableName="users"
+                             referencedColumnNames="id"/>
             </column>
-            <column name="created_at" type="timestamptz" />
-            <column name="last_edited" type="timestamptz" />
+            <column name="created_at" type="timestamptz"/>
+            <column name="last_edited" type="timestamptz"/>
         </createTable>
         <sql>
             ALTER SEQUENCE wiki_id_seq RESTART WITH 84680;
@@ -80,7 +84,8 @@
 
     <changeSet id="04.11.2022 rviirlaid 2" author="rviirlaid">
         <sql>
-            ALTER TABLE users ADD is_admin bool;
+            ALTER TABLE users
+                ADD is_admin bool;
 
             UPDATE public.roles
             SET description = 'user'
@@ -97,18 +102,4 @@
             VALUES ('management');
         </sql>
     </changeSet>
-    <changeSet id="04.11.2022spleesi1" author="spleesi">
-        <sql>
-            ALTER TABLE users
-            ADD UNIQUE (email);
-        </sql>
-    </changeSet>
-    <changeSet id="04.11.2022spleesi2" author="spleesi">
-        <sql>
-            ALTER TABLE users
-            DROP COLUMN username;
-        </sql>
-    </changeSet>
-
-
 </databaseChangeLog>
