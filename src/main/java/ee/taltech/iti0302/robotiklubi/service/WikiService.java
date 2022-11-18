@@ -1,10 +1,10 @@
 package ee.taltech.iti0302.robotiklubi.service;
 
+import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
 import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMapper;
-import ee.taltech.iti0302.robotiklubi.repository.WikiPage;
-import ee.taltech.iti0302.robotiklubi.repository.WikiRepository;
-import ee.taltech.iti0302.robotiklubi.repository.WikiTagRepository;
+import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiTagMapper;
+import ee.taltech.iti0302.robotiklubi.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,8 @@ public class WikiService {
     private final WikiRepository wikiRepository;
     private final WikiPageMapper wikiPageMapper;
     private final WikiTagRepository wikiTagRepository;
+    private final WikiTagMapper wikiTagMapper;
+    private final WikiTagRelationRepository wikiTagRelationRepository;
 
     public WikiPageDto getPageById(Long id) {
         Optional<WikiPage> pageOptional = wikiRepository.findById(id);
@@ -34,6 +36,9 @@ public class WikiService {
         return dto;
     }
 
-//    public List<String> getPageTags(Long id) {
-//    }
+    public List<TagDto> getPageTags(Long id) {
+        List<Long> tagIds = wikiTagRelationRepository.findAllByPageId(id.intValue()).stream().map(r -> Long.valueOf(r.getTagId())).toList();
+        List<WikiTag> tags = wikiTagRepository.findAllByIdIn(tagIds);
+        return wikiTagMapper.toDtoList(tags);
+    }
 }

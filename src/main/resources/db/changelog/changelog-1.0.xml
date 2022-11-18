@@ -104,7 +104,7 @@
                 <constraints primaryKey="true" nullable="false" unique="true" />
             </column>
             <column name="tag" type="char(20)">
-                <constraints nullable="false" />
+                <constraints nullable="false" unique="true" />
             </column>
         </createTable>
         <createTable tableName="wiki_tag_relations">

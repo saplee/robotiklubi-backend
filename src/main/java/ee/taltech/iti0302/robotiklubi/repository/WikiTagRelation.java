@@ -14,7 +14,7 @@ public class WikiTagRelation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "page_id")
-    private Integer page_id;
+    private Integer pageId;
     @Column(name = "tag_id")
-    private Integer tag_id;
+    private Integer tagId;
 }
