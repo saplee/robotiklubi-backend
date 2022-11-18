@@ -17,4 +17,8 @@ public class WikiController {
     public WikiPageDto getWikiPage(@PathVariable("id") Long id) {
         return wikiService.getPageById(id);
     }
+
+    @GetMapping("/wiki/tags/{id}")
+    public void getWikiPageTags(@PathVariable("id") Long id) {
+    }
 }

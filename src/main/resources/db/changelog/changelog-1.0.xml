@@ -98,4 +98,26 @@
         </sql>
     </changeSet>
 
+    <changeSet id="16.11.2022 rviirlaid 3" author="rviirlaid">
+        <createTable tableName="wiki_tags">
+            <column name="id" type="serial">
+                <constraints primaryKey="true" nullable="false" unique="true" />
+            </column>
+            <column name="tag" type="char(20)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <createTable tableName="wiki_tag_relations">
+            <column name="id" type="serial">
+                <constraints primaryKey="true" nullable="false" unique="true" />
+            </column>
+            <column name="page_id" type="int" >
+                <constraints nullable="false" foreignKeyName="fk_tag_relations_wiki_page" referencedTableName="wiki" referencedColumnNames="id"/>
+            </column>
+            <column name="tag_id" type="int" >
+                <constraints nullable="false" foreignKeyName="fk_tag_relations_wiki_tag" referencedTableName="wiki_tags" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
