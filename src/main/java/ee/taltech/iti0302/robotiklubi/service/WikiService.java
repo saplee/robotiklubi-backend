@@ -1,5 +1,6 @@
 package ee.taltech.iti0302.robotiklubi.service;
 
+import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageCreationResponseDto;
 import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMapper;
 import ee.taltech.iti0302.robotiklubi.repository.WikiPage;
@@ -29,5 +30,20 @@ public class WikiService {
         dto.setTitle("");
         dto.setContent("");
         return dto;
+    }
+
+    public WikiPageCreationResponseDto createPage(WikiPageDto wikiPageDto) {
+        WikiPageCreationResponseDto responseDto = new WikiPageCreationResponseDto();
+        responseDto.setSucceeded(true);
+        try {
+            WikiPage page = new WikiPage();
+            page.setTitle(wikiPageDto.getTitle());
+            page.setContent(wikiPageDto.getTitle());
+            page.setAuthorId(wikiPageDto.getAuthor());
+            wikiRepository.save(page);
+        } catch (Exception e) {
+            responseDto.setSucceeded(false);
+        }
+        return responseDto;
     }
 }

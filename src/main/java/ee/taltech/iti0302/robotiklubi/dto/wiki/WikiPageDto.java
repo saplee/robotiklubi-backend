@@ -7,4 +7,5 @@ public class WikiPageDto {
 
     private String title;
     private String content;
+    private Integer author;
 }
