@@ -2,7 +2,9 @@ package ee.taltech.iti0302.robotiklubi.service;
 
 import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
 import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
+import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageMetaDataDto;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMapper;
+import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMetaDataMapper;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiTagMapper;
 import ee.taltech.iti0302.robotiklubi.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class WikiService {
 
     private final WikiRepository wikiRepository;
     private final WikiPageMapper wikiPageMapper;
+    private final WikiPageMetaDataMapper wikiPageMetaDataMapper;
     private final WikiTagRepository wikiTagRepository;
     private final WikiTagMapper wikiTagMapper;
     private final WikiTagRelationRepository wikiTagRelationRepository;
@@ -40,5 +43,11 @@ public class WikiService {
         List<Long> tagIds = wikiTagRelationRepository.findAllByPageId(id.intValue()).stream().map(r -> Long.valueOf(r.getTagId())).toList();
         List<WikiTag> tags = wikiTagRepository.findAllByIdIn(tagIds);
         return wikiTagMapper.toDtoList(tags);
+    }
+
+    public List<WikiPageMetaDataDto> getPagesByTag(Long id) {
+        List<Long> pageIds = wikiTagRelationRepository.findAllByTagId(id.intValue()).stream().map(r -> Long.valueOf(r.getPageId())).toList();
+        List<WikiPage> pages = wikiRepository.findAllById(pageIds);
+        return wikiPageMetaDataMapper.toDtoList(pages);
     }
 }

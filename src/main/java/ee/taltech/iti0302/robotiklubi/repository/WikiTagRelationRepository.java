@@ -7,4 +7,6 @@ import java.util.List;
 public interface WikiTagRelationRepository extends JpaRepositoryImplementation<WikiTagRelation, Long> {
 
     List<WikiTagRelation> findAllByPageId(Integer id);
+
+    List<WikiTagRelation> findAllByTagId(Integer id);
 }
