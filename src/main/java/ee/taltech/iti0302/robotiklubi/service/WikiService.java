@@ -1,7 +1,8 @@
 package ee.taltech.iti0302.robotiklubi.service;
 
-import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageCreationResponseDto;
+import ee.taltech.iti0302.robotiklubi.dto.GenericResponseDto;
 import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
+import ee.taltech.iti0302.robotiklubi.exception.ApplicationException;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMapper;
 import ee.taltech.iti0302.robotiklubi.repository.WikiPage;
 import ee.taltech.iti0302.robotiklubi.repository.WikiRepository;
@@ -32,18 +33,16 @@ public class WikiService {
         return dto;
     }
 
-    public WikiPageCreationResponseDto createPage(WikiPageDto wikiPageDto) {
-        WikiPageCreationResponseDto responseDto = new WikiPageCreationResponseDto();
-        responseDto.setSucceeded(true);
+    public GenericResponseDto createPage(WikiPageDto wikiPageDto) {
         try {
             WikiPage page = new WikiPage();
             page.setTitle(wikiPageDto.getTitle());
-            page.setContent(wikiPageDto.getTitle());
+            page.setContent(wikiPageDto.getContent());
             page.setAuthorId(wikiPageDto.getAuthor());
             wikiRepository.save(page);
         } catch (Exception e) {
-            responseDto.setSucceeded(false);
+            throw new ApplicationException("Could not create wiki page.");
         }
-        return responseDto;
+        return new GenericResponseDto();
     }
 }

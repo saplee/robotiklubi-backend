@@ -1,6 +1,6 @@
 package ee.taltech.iti0302.robotiklubi.controller;
 
-import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageCreationResponseDto;
+import ee.taltech.iti0302.robotiklubi.dto.GenericResponseDto;
 import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
 import ee.taltech.iti0302.robotiklubi.service.WikiService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class WikiController {
     }
 
     @PostMapping("/wiki/create")
-    public WikiPageCreationResponseDto createWikiPage(@RequestBody WikiPageDto wikiPageDto) {
+    public GenericResponseDto createWikiPage(@RequestBody WikiPageDto wikiPageDto) {
         return wikiService.createPage(wikiPageDto);
     }
 }
