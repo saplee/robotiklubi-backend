@@ -1,9 +1,13 @@
 package ee.taltech.iti0302.robotiklubi.controller;
 
+import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
 import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
+import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageMetaDataDto;
 import ee.taltech.iti0302.robotiklubi.service.WikiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -15,6 +19,15 @@ public class WikiController {
     public WikiPageDto getWikiPage(@PathVariable("id") Long id) {
         return wikiService.getPageById(id);
     }
+
+    @GetMapping("/wiki/tags/{id}")
+    public List<TagDto> getWikiPageTags(@PathVariable("id") Long id) {
+        return wikiService.getPageTags(id);
+    }
+
+    @GetMapping("/wiki/tag/{id}")
+    public List<WikiPageMetaDataDto> getPagesDataByTag(@PathVariable("id") Long tagId) {
+        return wikiService.getPagesByTag(tagId);
 
     @PostMapping("/wiki/create")
     public void createWikiPage(@RequestBody WikiPageDto wikiPageDto) {
