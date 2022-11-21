@@ -3,6 +3,8 @@ package ee.taltech.iti0302.robotiklubi.service;
 import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
 import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
 import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageMetaDataDto;
+import ee.taltech.iti0302.robotiklubi.exception.ApplicationException;
+import ee.taltech.iti0302.robotiklubi.exception.NotFoundException;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMapper;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMetaDataMapper;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiTagMapper;
@@ -49,5 +51,37 @@ public class WikiService {
         List<Long> pageIds = wikiTagRelationRepository.findAllByTagId(id.intValue()).stream().map(r -> Long.valueOf(r.getPageId())).toList();
         List<WikiPage> pages = wikiRepository.findAllById(pageIds);
         return wikiPageMetaDataMapper.toDtoList(pages);
+
+    public void createPage(WikiPageDto wikiPageDto) {
+        try {
+            WikiPage page = new WikiPage();
+            page.setTitle(wikiPageDto.getTitle());
+            page.setContent(wikiPageDto.getContent());
+            page.setAuthorId(wikiPageDto.getAuthor());
+            wikiRepository.save(page);
+        } catch (Exception e) {
+            throw new ApplicationException("Could not create wiki page.");
+        }
+    }
+
+    public void updatePage(Long id, WikiPageDto wikiPageDto) {
+        Optional<WikiPage> pageOptional = wikiRepository.findById(id);
+        if (pageOptional.isEmpty()) throw new NotFoundException("Wiki page not found.");
+        try {
+            WikiPage page = pageOptional.get();
+            page.setTitle(wikiPageDto.getTitle());
+            page.setContent(wikiPageDto.getContent());
+            page.setLastEditedBy(wikiPageDto.getLastEditedBy());
+            wikiRepository.save(page);
+        } catch (Exception e) {
+            throw new ApplicationException("Could not update wiki page.");
+        }
+    }
+
+    public void deletePage(Long id) {
+        Optional<WikiPage> pageOptional = wikiRepository.findById(id);
+        pageOptional.ifPresentOrElse(
+                wikiRepository::delete,
+                () -> {throw new NotFoundException("Wiki page not found.");});
     }
 }
