@@ -51,6 +51,7 @@ public class WikiService {
         List<Long> pageIds = wikiTagRelationRepository.findAllByTagId(id.intValue()).stream().map(r -> Long.valueOf(r.getPageId())).toList();
         List<WikiPage> pages = wikiRepository.findAllById(pageIds);
         return wikiPageMetaDataMapper.toDtoList(pages);
+    }
 
     public void createPage(WikiPageDto wikiPageDto) {
         try {
