@@ -24,6 +24,8 @@ public class WikiPage {
     private OffsetDateTime createdAt;
     @Column(name = "last_edited")
     private OffsetDateTime lastEdited;
+    @Column(name = "last_edited_by")
+    private Integer lastEditedBy;
 
     @PrePersist
     public void saveCreationTime() {

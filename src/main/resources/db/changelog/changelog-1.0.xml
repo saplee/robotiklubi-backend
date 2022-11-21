@@ -98,4 +98,15 @@
         </sql>
     </changeSet>
 
+    <changeSet id="21.11.2022 rviirlaid 4" author="rviirlaid">
+        <sql>
+            alter table wiki
+            add last_edited_by integer;
+
+            alter table wiki
+            add constraint wiki_users_id_fk
+            foreign key (last_edited_by) references users;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
