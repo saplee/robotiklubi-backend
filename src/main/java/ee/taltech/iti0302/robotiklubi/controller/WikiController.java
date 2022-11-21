@@ -28,6 +28,7 @@ public class WikiController {
     @GetMapping("/wiki/tag/{id}")
     public List<WikiPageMetaDataDto> getPagesDataByTag(@PathVariable("id") Long tagId) {
         return wikiService.getPagesByTag(tagId);
+    }
 
     @PostMapping("/wiki/create")
     public void createWikiPage(@RequestBody WikiPageDto wikiPageDto) {

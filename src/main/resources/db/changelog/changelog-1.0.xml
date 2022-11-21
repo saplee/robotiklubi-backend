@@ -118,6 +118,7 @@
                 <constraints nullable="false" foreignKeyName="fk_tag_relations_wiki_tag" referencedTableName="wiki_tags" referencedColumnNames="id"/>
             </column>
         </createTable>
+    </changeSet>
 
     <changeSet id="21.11.2022 rviirlaid 4" author="rviirlaid">
         <sql>
