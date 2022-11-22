@@ -53,17 +53,7 @@ if [ ! -d "/opt/CuraEngine" ]
   cd /
 fi
 
-
-# Cura
-if [ ! -d "/opt/Cura" ]
-then
-  cd opt || return 1
-  wget clone https://github.com/Ultimaker/Cura.git
-  cp ./Cura/resources/extruders/creality_base_extruder_0.def.json ./Cura/resources/definitions/
-  cd /
-fi
-
 # Environment variables
-if  ! grep -qF 'export CURA_ENGINE_SEARCH_PATH=/opt/Cura/resources/definitions' $(home)/.bashrc ; then
-  echo "export CURA_ENGINE_SEARCH_PATH=/opt/Cura/resources/definitions" >> ~/.bashrc
+if  ! grep -qF 'export CURA_ENGINE_SEARCH_PATH=/opt/PrinterConfigs/' $(home)/.bashrc ; then
+  echo "export CURA_ENGINE_SEARCH_PATH=/opt/PrinterConfigs/" >> ~/.bashrc
 fi
