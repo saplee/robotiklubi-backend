@@ -1,8 +1,6 @@
 package ee.taltech.iti0302.robotiklubi.controller;
 
-import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
-import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
-import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageMetaDataDto;
+import ee.taltech.iti0302.robotiklubi.dto.wiki.*;
 import ee.taltech.iti0302.robotiklubi.service.WikiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +41,10 @@ public class WikiController {
     @DeleteMapping("/wiki/delete")
     public void deleteWikiPage(@RequestParam("id") Long id) {
         wikiService.deletePage(id);
+    }
+
+    @GetMapping ("/wiki/search")
+    WikiSearchResult searchWikiPages(@RequestBody WikiSearchCriteria searchCriteria) {
+        return wikiService.findAllByCriteria(searchCriteria);
     }
 }

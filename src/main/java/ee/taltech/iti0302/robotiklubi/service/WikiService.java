@@ -1,8 +1,6 @@
 package ee.taltech.iti0302.robotiklubi.service;
 
-import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
-import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
-import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageMetaDataDto;
+import ee.taltech.iti0302.robotiklubi.dto.wiki.*;
 import ee.taltech.iti0302.robotiklubi.exception.ApplicationException;
 import ee.taltech.iti0302.robotiklubi.exception.NotFoundException;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMapper;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Transactional
@@ -21,9 +20,15 @@ import java.util.Optional;
 @Service
 public class WikiService {
 
+    private static final int MAX_PAGINATION = 50;
+    private static final int DEFAULT_PAGINATION = 10;
+
     private final WikiRepository wikiRepository;
     private final WikiPageMapper wikiPageMapper;
     private final WikiPageMetaDataMapper wikiPageMetaDataMapper;
+
+    private final WikiCriteriaRepository wikiCriteriaRepository;
+
     private final WikiTagRepository wikiTagRepository;
     private final WikiTagMapper wikiTagMapper;
     private final WikiTagRelationRepository wikiTagRelationRepository;
@@ -84,5 +89,13 @@ public class WikiService {
         pageOptional.ifPresentOrElse(
                 wikiRepository::delete,
                 () -> {throw new NotFoundException("Wiki page not found.");});
+    }
+
+    public WikiSearchResult findAllByCriteria(WikiSearchCriteria searchCriteria) {
+        if (searchCriteria.getResultsPerPage() == null) searchCriteria.setResultsPerPage(DEFAULT_PAGINATION);
+        searchCriteria.setResultsPerPage(Math.min(searchCriteria.getResultsPerPage(), MAX_PAGINATION));
+        Map.Entry<Long, List<WikiPage>> searchResults = wikiCriteriaRepository.findAllByCriteria(searchCriteria);
+        if (searchResults.getValue().isEmpty()) throw new NotFoundException("No matching pages found.");
+        return new WikiSearchResult(searchResults.getKey(), wikiPageMetaDataMapper.toDtoList(searchResults.getValue()));
     }
 }
