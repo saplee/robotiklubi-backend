@@ -15,7 +15,6 @@ public class FileProcessorController {
 
     @PostMapping("/process")
     public String processFiles(@RequestParam("file") MultipartFile file) {
-        processFilesService.processFiles(file);
-        return "Done process";
+        return processFilesService.processFiles(file) ? "Done process" : "Error";
     }
 }

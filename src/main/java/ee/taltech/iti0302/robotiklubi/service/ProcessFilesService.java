@@ -20,11 +20,11 @@ public class ProcessFilesService {
 
     private final Logger logger = Logger.getLogger("ProcessFilesService");
 
-    public void processFiles(MultipartFile file) {
+    public boolean processFiles(MultipartFile file) {
         try {
             String uploadsFolder = "/uploads/";
             String fileName = file.getOriginalFilename();
-            if (fileName == null) return;
+            if (fileName == null) return false;
 
             fileName = fileName.replace(" ", "_");
             String gcodeFileName = fileName.substring(0, fileName.length() - 4) + ".gcode";
@@ -34,14 +34,17 @@ public class ProcessFilesService {
             file.transferTo(localFile);
 
             Runtime rt = Runtime.getRuntime();
-            String[] command = {"curaengine slice -j /opt/Cura/resources/definitions/RobotiklubiConf.def.json -s" +
-                    " roofing_layer_count=2 -s roofing_monotonic=true" + " -l " + uploadsFolder + fileName + " -o " +
+            String[] command = {"curaengine slice -j /opt/PrinterConfigs/RobotiklubiConf.def.json" +
+                    " -l " + uploadsFolder + fileName + " -o " +
                     uploadsFolder + gcodeFileName};
-            Process pr = rt.exec(command);
+            Process pr = new ProcessBuilder("curaengine", "slice", "-j", "/opt/PrinterConfigs/RobotiklubiConf.def.json", "-l",
+                    uploadsFolder + fileName, "-o", uploadsFolder + gcodeFileName).start();
 
             logOutputs(pr);
+            return isGcodeFilePresent(gcodeFileName);
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -51,5 +54,11 @@ public class ProcessFilesService {
         while ((line = bfr.readLine()) != null) {
             logger.log(Level.INFO, line);
         }
+    }
+
+    private boolean isGcodeFilePresent(String fileName) {
+        Path basePath = Paths.get("");
+        File localFile = new File(basePath.toAbsolutePath() + "/uploads/" + fileName);
+        return localFile.exists();
     }
 }
