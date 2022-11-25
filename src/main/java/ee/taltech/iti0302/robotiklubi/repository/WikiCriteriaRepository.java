@@ -18,12 +18,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WikiCriteriaRepository {
 
+    private static final String ID = "id";
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
     private static final String CREATION_DATE = "createdAt";
     private static final String EDITING_DATE = "lastEdited";
 
     private final EntityManager entityManager;
+    private final WikiTagRelationRepository repository;
 
     public Map.Entry<Long, List<WikiPage>> findAllByCriteria(WikiSearchCriteria searchCriteria) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -54,6 +56,10 @@ public class WikiCriteriaRepository {
         }
         if (searchCriteria.getContentSearch() != null && !searchCriteria.getContentSearch().isBlank()) {
             predicates.add(cb.like(cb.lower(root.get(CONTENT)), "%" + searchCriteria.getContentSearch().toLowerCase() + "%"));
+        }
+        if (searchCriteria.getTags() != null && !searchCriteria.getTags().isEmpty()) {
+            List<Integer> pagesWithAllMatchingTags = repository.getPagesWithAllMatchingTags(searchCriteria.getTags(), searchCriteria.getTags().size());
+            predicates.add(root.get(ID).in(pagesWithAllMatchingTags));
         }
         return predicates;
     }

@@ -44,7 +44,7 @@ public class WikiController {
     }
 
     @GetMapping ("/wiki/search")
-    WikiSearchResult searchWikiPages(@RequestBody WikiSearchCriteria searchCriteria) {
+    public WikiSearchResult searchWikiPages(@RequestBody WikiSearchCriteria searchCriteria) {
         return wikiService.findAllByCriteria(searchCriteria);
     }
 }

@@ -29,7 +29,6 @@ public class WikiService {
 
     private final WikiCriteriaRepository wikiCriteriaRepository;
 
-    private final WikiTagRepository wikiTagRepository;
     private final WikiTagMapper wikiTagMapper;
     private final WikiTagRelationRepository wikiTagRelationRepository;
 
@@ -44,14 +43,12 @@ public class WikiService {
     }
 
     public List<TagDto> getPageTags(Long id) {
-        List<Long> tagIds = wikiTagRelationRepository.findAllByPageId(id.intValue()).stream().map(r -> Long.valueOf(r.getTagId())).toList();
-        List<WikiTag> tags = wikiTagRepository.findAllByIdIn(tagIds);
+        List<WikiTag> tags = wikiTagRelationRepository.findAllByPageId(id).stream().map(WikiTagRelation::getTag).toList();
         return wikiTagMapper.toDtoList(tags);
     }
 
     public List<WikiPageMetaDataDto> getPagesByTag(Long id) {
-        List<Long> pageIds = wikiTagRelationRepository.findAllByTagId(id.intValue()).stream().map(r -> Long.valueOf(r.getPageId())).toList();
-        List<WikiPage> pages = wikiRepository.findAllById(pageIds);
+        List<WikiPage> pages = wikiTagRelationRepository.findAllByTagId(id).stream().map(WikiTagRelation::getPage).toList();
         return wikiPageMetaDataMapper.toDtoList(pages);
     }
 
