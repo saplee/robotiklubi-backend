@@ -1,10 +1,12 @@
 package ee.taltech.iti0302.robotiklubi.dto.wiki;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@Builder
 public class WikiSearchCriteria {
 
     private String titleSearch;

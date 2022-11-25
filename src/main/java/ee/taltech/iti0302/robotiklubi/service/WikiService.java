@@ -40,10 +40,7 @@ public class WikiService {
             page.setTitle(page.getTitle().strip());
             return wikiPageMapper.toDto(pageOptional.get());
         }
-        WikiPageDto dto = new WikiPageDto();
-        dto.setTitle("");
-        dto.setContent("");
-        return dto;
+        return WikiPageDto.builder().title("").content("").build();
     }
 
     public List<TagDto> getPageTags(Long id) {
@@ -60,10 +57,11 @@ public class WikiService {
 
     public void createPage(WikiPageDto wikiPageDto) {
         try {
-            WikiPage page = new WikiPage();
-            page.setTitle(wikiPageDto.getTitle());
-            page.setContent(wikiPageDto.getContent());
-            page.setAuthorId(wikiPageDto.getAuthor());
+            WikiPage page = WikiPage.builder()
+                    .title(wikiPageDto.getTitle())
+                    .content(wikiPageDto.getContent())
+                    .authorId(wikiPageDto.getAuthor())
+                    .build();
             wikiRepository.save(page);
         } catch (Exception e) {
             throw new ApplicationException("Could not create wiki page.");
