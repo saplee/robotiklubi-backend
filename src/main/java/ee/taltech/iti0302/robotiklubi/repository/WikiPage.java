@@ -35,4 +35,8 @@ public class WikiPage {
     public void saveEditedTime() {
         lastEdited = OffsetDateTime.now();
     }
+
+    public String getSummary() {
+        return content.substring(0, Math.min(400, content.length())) + "...";
+    }
 }
