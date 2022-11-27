@@ -18,6 +18,11 @@ public class WikiController {
         return wikiService.getPageById(id);
     }
 
+    @GetMapping("/wiki/tags")
+    public List<TagDto> getAllTags() {
+        return wikiService.getAllTags();
+    }
+
     @GetMapping("/wiki/tags/{id}")
     public List<TagDto> getWikiPageTags(@PathVariable("id") Long id) {
         return wikiService.getPageTags(id);

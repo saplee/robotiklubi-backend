@@ -28,15 +28,21 @@ public class WikiService {
     private final WikiPageMapper wikiPageMapper;
     private final WikiPageMetaDataMapper wikiPageMetaDataMapper;
 
-    private final WikiCriteriaRepository wikiCriteriaRepository;
-
+    private final WikiTagRepository wikiTagRepository;
     private final WikiTagMapper wikiTagMapper;
+
     private final WikiTagRelationRepository wikiTagRelationRepository;
+
+    private final WikiCriteriaRepository wikiCriteriaRepository;
 
     public WikiPageDto getPageById(Long id) {
         Optional<WikiPage> pageOptional = wikiRepository.findById(id);
         if (pageOptional.isPresent()) return wikiPageMapper.toDto(pageOptional.get());
         throw new NotFoundException(PAGE_NOT_FOUND);
+    }
+
+    public List<TagDto> getAllTags() {
+        return wikiTagMapper.toDtoList(wikiTagRepository.findAll());
     }
 
     public List<TagDto> getPageTags(Long id) {
