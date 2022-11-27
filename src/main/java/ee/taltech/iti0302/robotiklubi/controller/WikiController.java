@@ -43,7 +43,7 @@ public class WikiController {
         wikiService.deletePage(id);
     }
 
-    @GetMapping ("/wiki/search")
+    @PostMapping ("/wiki/search")
     public WikiSearchResult searchWikiPages(@RequestBody WikiSearchCriteria searchCriteria) {
         return wikiService.findAllByCriteria(searchCriteria);
     }

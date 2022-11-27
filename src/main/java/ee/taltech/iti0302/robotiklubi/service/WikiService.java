@@ -22,6 +22,7 @@ public class WikiService {
 
     private static final int MAX_PAGINATION = 50;
     private static final int DEFAULT_PAGINATION = 10;
+    private static final String PAGE_NOT_FOUND = "Wiki page not found.";
 
     private final WikiRepository wikiRepository;
     private final WikiPageMapper wikiPageMapper;
@@ -34,12 +35,8 @@ public class WikiService {
 
     public WikiPageDto getPageById(Long id) {
         Optional<WikiPage> pageOptional = wikiRepository.findById(id);
-        if (pageOptional.isPresent()) {
-            WikiPage page = pageOptional.get();
-            page.setTitle(page.getTitle().strip());
-            return wikiPageMapper.toDto(pageOptional.get());
-        }
-        return WikiPageDto.builder().title("").content("").build();
+        if (pageOptional.isPresent()) return wikiPageMapper.toDto(pageOptional.get());
+        throw new NotFoundException(PAGE_NOT_FOUND);
     }
 
     public List<TagDto> getPageTags(Long id) {
@@ -67,7 +64,7 @@ public class WikiService {
 
     public void updatePage(Long id, WikiPageDto wikiPageDto) {
         Optional<WikiPage> pageOptional = wikiRepository.findById(id);
-        if (pageOptional.isEmpty()) throw new NotFoundException("Wiki page not found.");
+        if (pageOptional.isEmpty()) throw new NotFoundException(PAGE_NOT_FOUND);
         try {
             WikiPage page = pageOptional.get();
             page.setTitle(wikiPageDto.getTitle());
@@ -83,7 +80,7 @@ public class WikiService {
         Optional<WikiPage> pageOptional = wikiRepository.findById(id);
         pageOptional.ifPresentOrElse(
                 wikiRepository::delete,
-                () -> {throw new NotFoundException("Wiki page not found.");});
+                () -> {throw new NotFoundException(PAGE_NOT_FOUND);});
     }
 
     public WikiSearchResult findAllByCriteria(WikiSearchCriteria searchCriteria) {
