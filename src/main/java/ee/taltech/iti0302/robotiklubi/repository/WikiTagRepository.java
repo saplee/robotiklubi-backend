@@ -2,10 +2,9 @@ package ee.taltech.iti0302.robotiklubi.repository;
 
 import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 
 public interface WikiTagRepository extends JpaRepositoryImplementation<WikiTag, Long> {
 
-    List<WikiTag> findAllByIdIn(Collection<Long> ids);
+    Optional<WikiTag> findByTag(String tag);
 }

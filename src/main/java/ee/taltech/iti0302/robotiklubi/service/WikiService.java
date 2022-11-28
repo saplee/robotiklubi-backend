@@ -28,32 +28,11 @@ public class WikiService {
     private final WikiPageMapper wikiPageMapper;
     private final WikiPageMetaDataMapper wikiPageMetaDataMapper;
 
-    private final WikiTagRepository wikiTagRepository;
     private final WikiTagMapper wikiTagMapper;
 
     private final WikiTagRelationRepository wikiTagRelationRepository;
 
     private final WikiCriteriaRepository wikiCriteriaRepository;
-
-    public WikiPageDto getPageById(Long id) {
-        Optional<WikiPage> pageOptional = wikiRepository.findById(id);
-        if (pageOptional.isPresent()) return wikiPageMapper.toDto(pageOptional.get());
-        throw new NotFoundException(PAGE_NOT_FOUND);
-    }
-
-    public List<TagDto> getAllTags() {
-        return wikiTagMapper.toDtoList(wikiTagRepository.findAll());
-    }
-
-    public List<TagDto> getPageTags(Long id) {
-        List<WikiTag> tags = wikiTagRelationRepository.findAllByPageId(id).stream().map(WikiTagRelation::getTag).toList();
-        return wikiTagMapper.toDtoList(tags);
-    }
-
-    public List<WikiPageMetaDataDto> getPagesByTag(Long id) {
-        List<WikiPage> pages = wikiTagRelationRepository.findAllByTagId(id).stream().map(WikiTagRelation::getPage).toList();
-        return wikiPageMetaDataMapper.toDtoList(pages);
-    }
 
     public void createPage(WikiPageDto wikiPageDto) {
         try {
@@ -68,6 +47,12 @@ public class WikiService {
         }
     }
 
+    public WikiPageDto getPageById(Long id) {
+        Optional<WikiPage> pageOptional = wikiRepository.findById(id);
+        if (pageOptional.isPresent()) return wikiPageMapper.toDto(pageOptional.get());
+        throw new NotFoundException(PAGE_NOT_FOUND);
+    }
+
     public void updatePage(Long id, WikiPageDto wikiPageDto) {
         Optional<WikiPage> pageOptional = wikiRepository.findById(id);
         if (pageOptional.isEmpty()) throw new NotFoundException(PAGE_NOT_FOUND);
@@ -76,7 +61,6 @@ public class WikiService {
             page.setTitle(wikiPageDto.getTitle());
             page.setContent(wikiPageDto.getContent());
             page.setLastEditedBy(wikiPageDto.getLastEditedBy());
-            wikiRepository.save(page);
         } catch (Exception e) {
             throw new ApplicationException("Could not update wiki page.");
         }
@@ -84,9 +68,15 @@ public class WikiService {
 
     public void deletePage(Long id) {
         Optional<WikiPage> pageOptional = wikiRepository.findById(id);
-        pageOptional.ifPresentOrElse(
-                wikiRepository::delete,
-                () -> {throw new NotFoundException(PAGE_NOT_FOUND);});
+        if (pageOptional.isEmpty()) throw new NotFoundException(PAGE_NOT_FOUND);
+        List<WikiTagRelation> relations = wikiTagRelationRepository.findAllByPage(pageOptional.get());
+        wikiTagRelationRepository.deleteAll(relations);
+        wikiRepository.delete(pageOptional.get());
+    }
+
+    public List<TagDto> getPageTags(Long id) {
+        List<WikiTag> tags = wikiTagRelationRepository.findAllByPageId(id).stream().map(WikiTagRelation::getTag).toList();
+        return wikiTagMapper.toDtoList(tags);
     }
 
     public WikiSearchResult findAllByCriteria(WikiSearchCriteria searchCriteria) {

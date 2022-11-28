@@ -13,29 +13,14 @@ public class WikiController {
 
     private final WikiService wikiService;
 
-    @GetMapping("/wiki/{id}")
-    public WikiPageDto getWikiPage(@PathVariable("id") Long id) {
-        return wikiService.getPageById(id);
-    }
-
-    @GetMapping("/wiki/tags")
-    public List<TagDto> getAllTags() {
-        return wikiService.getAllTags();
-    }
-
-    @GetMapping("/wiki/tags/{id}")
-    public List<TagDto> getWikiPageTags(@PathVariable("id") Long id) {
-        return wikiService.getPageTags(id);
-    }
-
-    @GetMapping("/wiki/tag/{id}")
-    public List<WikiPageMetaDataDto> getPagesDataByTag(@PathVariable("id") Long tagId) {
-        return wikiService.getPagesByTag(tagId);
-    }
-
     @PostMapping("/wiki/create")
     public void createWikiPage(@RequestBody WikiPageDto wikiPageDto) {
         wikiService.createPage(wikiPageDto);
+    }
+
+    @GetMapping("/wiki/{id}")
+    public WikiPageDto getWikiPage(@PathVariable("id") Long id) {
+        return wikiService.getPageById(id);
     }
 
     @PutMapping("/wiki/update")
@@ -46,6 +31,11 @@ public class WikiController {
     @DeleteMapping("/wiki/delete")
     public void deleteWikiPage(@RequestParam("id") Long id) {
         wikiService.deletePage(id);
+    }
+
+    @GetMapping("/wiki/tags/{id}")
+    public List<TagDto> getWikiPageTags(@PathVariable("id") Long id) {
+        return wikiService.getPageTags(id);
     }
 
     @PostMapping ("/wiki/search")
