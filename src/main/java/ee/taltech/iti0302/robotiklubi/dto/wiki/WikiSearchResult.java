@@ -11,6 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 public class WikiSearchResult {
 
-    private Long numberOfResults;
+    private Long totalResults;
+    private Integer prevPage;
+    private Integer nextPage;
     private List<WikiPageMetaDataDto> results;
+    private Long timeTaken;
 }

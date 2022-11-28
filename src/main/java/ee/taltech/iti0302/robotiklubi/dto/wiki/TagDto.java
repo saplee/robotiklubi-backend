@@ -7,5 +7,6 @@ import lombok.Data;
 @Builder
 public class TagDto {
 
+    private Long id;
     private String tag;
 }

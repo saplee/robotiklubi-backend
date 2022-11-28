@@ -90,10 +90,17 @@ public class WikiService {
     }
 
     public WikiSearchResult findAllByCriteria(WikiSearchCriteria searchCriteria) {
+        long start = System.currentTimeMillis();
         if (searchCriteria.getResultsPerPage() == null) searchCriteria.setResultsPerPage(DEFAULT_PAGINATION);
+        if (searchCriteria.getFirstResult() == null ||searchCriteria.getFirstResult() < 0) searchCriteria.setFirstResult(0);
         searchCriteria.setResultsPerPage(Math.min(searchCriteria.getResultsPerPage(), MAX_PAGINATION));
         Map.Entry<Long, List<WikiPage>> searchResults = wikiCriteriaRepository.findAllByCriteria(searchCriteria);
         if (searchResults.getValue().isEmpty()) throw new NotFoundException("No matching pages found.");
-        return new WikiSearchResult(searchResults.getKey(), wikiPageMetaDataMapper.toDtoList(searchResults.getValue()));
+        int prevPage = -1;
+        int nextPage = -1;
+        if (searchCriteria.getFirstResult() - searchCriteria.getResultsPerPage() > 0) prevPage = searchCriteria.getFirstResult() - searchCriteria.getResultsPerPage();
+        else if (searchCriteria.getFirstResult() != 0) prevPage = 0;
+        if (searchCriteria.getFirstResult() + searchCriteria.getResultsPerPage() < searchResults.getKey()) nextPage = searchCriteria.getFirstResult() + searchCriteria.getResultsPerPage();
+        return new WikiSearchResult(searchResults.getKey(), prevPage, nextPage, wikiPageMetaDataMapper.toDtoList(searchResults.getValue()), System.currentTimeMillis() - start);
     }
 }
