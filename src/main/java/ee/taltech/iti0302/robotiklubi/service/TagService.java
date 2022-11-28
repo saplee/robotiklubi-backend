@@ -41,7 +41,7 @@ public class TagService {
     public void updateTag(Long id, TagDto tagDto) {
         Optional<WikiTag> tagOptional = tagRepository.findById(id);
         if (tagOptional.isEmpty()) throw new NotFoundException("Tag not found.");
-        try {tagOptional.get().setTag(tagDto.getTag());}
+        try {tagOptional.get().setTag(tagDto.getTag().toLowerCase());}
         catch (Exception e) {throw new ApplicationException("Could not update tag.");}
     }
 
