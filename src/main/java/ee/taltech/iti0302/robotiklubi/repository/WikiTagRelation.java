@@ -13,8 +13,10 @@ public class WikiTagRelation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "page_id")
-    private Integer pageId;
-    @Column(name = "tag_id")
-    private Integer tagId;
+    @ManyToOne
+    @JoinColumn(name = "page_id")
+    private WikiPage page;
+    @ManyToOne
+    @JoinColumn(name = "tag_id")
+    private WikiTag tag;
 }

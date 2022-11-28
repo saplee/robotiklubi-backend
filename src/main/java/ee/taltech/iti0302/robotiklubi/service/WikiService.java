@@ -1,8 +1,6 @@
 package ee.taltech.iti0302.robotiklubi.service;
 
-import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
-import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
-import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageMetaDataDto;
+import ee.taltech.iti0302.robotiklubi.dto.wiki.*;
 import ee.taltech.iti0302.robotiklubi.exception.ApplicationException;
 import ee.taltech.iti0302.robotiklubi.exception.NotFoundException;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMapper;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Transactional
@@ -21,44 +20,48 @@ import java.util.Optional;
 @Service
 public class WikiService {
 
+    private static final int MAX_PAGINATION = 50;
+    private static final int DEFAULT_PAGINATION = 10;
+    private static final String PAGE_NOT_FOUND = "Wiki page not found.";
+
     private final WikiRepository wikiRepository;
     private final WikiPageMapper wikiPageMapper;
     private final WikiPageMetaDataMapper wikiPageMetaDataMapper;
+
     private final WikiTagRepository wikiTagRepository;
     private final WikiTagMapper wikiTagMapper;
+
     private final WikiTagRelationRepository wikiTagRelationRepository;
+
+    private final WikiCriteriaRepository wikiCriteriaRepository;
 
     public WikiPageDto getPageById(Long id) {
         Optional<WikiPage> pageOptional = wikiRepository.findById(id);
-        if (pageOptional.isPresent()) {
-            WikiPage page = pageOptional.get();
-            page.setTitle(page.getTitle().strip());
-            return wikiPageMapper.toDto(pageOptional.get());
-        }
-        WikiPageDto dto = new WikiPageDto();
-        dto.setTitle("");
-        dto.setContent("");
-        return dto;
+        if (pageOptional.isPresent()) return wikiPageMapper.toDto(pageOptional.get());
+        throw new NotFoundException(PAGE_NOT_FOUND);
+    }
+
+    public List<TagDto> getAllTags() {
+        return wikiTagMapper.toDtoList(wikiTagRepository.findAll());
     }
 
     public List<TagDto> getPageTags(Long id) {
-        List<Long> tagIds = wikiTagRelationRepository.findAllByPageId(id.intValue()).stream().map(r -> Long.valueOf(r.getTagId())).toList();
-        List<WikiTag> tags = wikiTagRepository.findAllByIdIn(tagIds);
+        List<WikiTag> tags = wikiTagRelationRepository.findAllByPageId(id).stream().map(WikiTagRelation::getTag).toList();
         return wikiTagMapper.toDtoList(tags);
     }
 
     public List<WikiPageMetaDataDto> getPagesByTag(Long id) {
-        List<Long> pageIds = wikiTagRelationRepository.findAllByTagId(id.intValue()).stream().map(r -> Long.valueOf(r.getPageId())).toList();
-        List<WikiPage> pages = wikiRepository.findAllById(pageIds);
+        List<WikiPage> pages = wikiTagRelationRepository.findAllByTagId(id).stream().map(WikiTagRelation::getPage).toList();
         return wikiPageMetaDataMapper.toDtoList(pages);
     }
 
     public void createPage(WikiPageDto wikiPageDto) {
         try {
-            WikiPage page = new WikiPage();
-            page.setTitle(wikiPageDto.getTitle());
-            page.setContent(wikiPageDto.getContent());
-            page.setAuthorId(wikiPageDto.getAuthor());
+            WikiPage page = WikiPage.builder()
+                    .title(wikiPageDto.getTitle())
+                    .content(wikiPageDto.getContent())
+                    .authorId(wikiPageDto.getAuthor())
+                    .build();
             wikiRepository.save(page);
         } catch (Exception e) {
             throw new ApplicationException("Could not create wiki page.");
@@ -67,7 +70,7 @@ public class WikiService {
 
     public void updatePage(Long id, WikiPageDto wikiPageDto) {
         Optional<WikiPage> pageOptional = wikiRepository.findById(id);
-        if (pageOptional.isEmpty()) throw new NotFoundException("Wiki page not found.");
+        if (pageOptional.isEmpty()) throw new NotFoundException(PAGE_NOT_FOUND);
         try {
             WikiPage page = pageOptional.get();
             page.setTitle(wikiPageDto.getTitle());
@@ -83,6 +86,21 @@ public class WikiService {
         Optional<WikiPage> pageOptional = wikiRepository.findById(id);
         pageOptional.ifPresentOrElse(
                 wikiRepository::delete,
-                () -> {throw new NotFoundException("Wiki page not found.");});
+                () -> {throw new NotFoundException(PAGE_NOT_FOUND);});
+    }
+
+    public WikiSearchResult findAllByCriteria(WikiSearchCriteria searchCriteria) {
+        long start = System.currentTimeMillis();
+        if (searchCriteria.getResultsPerPage() == null) searchCriteria.setResultsPerPage(DEFAULT_PAGINATION);
+        if (searchCriteria.getFirstResult() == null ||searchCriteria.getFirstResult() < 0) searchCriteria.setFirstResult(0);
+        searchCriteria.setResultsPerPage(Math.min(searchCriteria.getResultsPerPage(), MAX_PAGINATION));
+        Map.Entry<Long, List<WikiPage>> searchResults = wikiCriteriaRepository.findAllByCriteria(searchCriteria);
+        if (searchResults.getValue().isEmpty()) throw new NotFoundException("No matching pages found.");
+        int prevPage = -1;
+        int nextPage = -1;
+        if (searchCriteria.getFirstResult() - searchCriteria.getResultsPerPage() > 0) prevPage = searchCriteria.getFirstResult() - searchCriteria.getResultsPerPage();
+        else if (searchCriteria.getFirstResult() != 0) prevPage = 0;
+        if (searchCriteria.getFirstResult() + searchCriteria.getResultsPerPage() < searchResults.getKey()) nextPage = searchCriteria.getFirstResult() + searchCriteria.getResultsPerPage();
+        return new WikiSearchResult(searchResults.getKey(), prevPage, nextPage, wikiPageMetaDataMapper.toDtoList(searchResults.getValue()), System.currentTimeMillis() - start);
     }
 }
