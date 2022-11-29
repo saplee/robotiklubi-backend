@@ -1,6 +1,7 @@
 package ee.taltech.iti0302.robotiklubi.controller;
 
 import ee.taltech.iti0302.robotiklubi.dto.user.SignUpResponseDto;
+import ee.taltech.iti0302.robotiklubi.dto.user.SignUpUserDto;
 import ee.taltech.iti0302.robotiklubi.dto.user.UserDto;
 import ee.taltech.iti0302.robotiklubi.repository.User;
 import ee.taltech.iti0302.robotiklubi.service.UserService;
@@ -32,18 +33,8 @@ public class UserController {
         return userService.getAllManagement();
     }
 
-    @PostMapping("/signup")
-    public SignUpResponseDto registerUser(@RequestBody User user) {
+    @PostMapping("/user/signup")
+    public SignUpResponseDto registerUser(@RequestBody SignUpUserDto user) {
         return userService.addUser(user);
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*");
-            }
-        };
     }
 }

@@ -1,6 +1,7 @@
 package ee.taltech.iti0302.robotiklubi.service;
 
 import ee.taltech.iti0302.robotiklubi.dto.user.SignUpResponseDto;
+import ee.taltech.iti0302.robotiklubi.dto.user.SignUpUserDto;
 import ee.taltech.iti0302.robotiklubi.dto.user.UserDto;
 import ee.taltech.iti0302.robotiklubi.mappers.user.UserMapper;
 import ee.taltech.iti0302.robotiklubi.repository.User;
@@ -26,18 +27,20 @@ public class UserService {
     public List<UserDto> getAllManagement() {
         return userMapper.toDtoList(userRepository.findAllByRole(4));
     }
-
-    public SignUpResponseDto addUser(User user) {
+    @Transactional
+    public SignUpResponseDto addUser(SignUpUserDto user) {
         SignUpResponseDto signUpResponseDto = new SignUpResponseDto();
-        user.setRole(1);
-        user.setIsAdmin(false);
-        user.setEmail(user.getEmail().toLowerCase());
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepository.findByEmailIgnoreCase(user.getEmail()).isPresent()) {
             signUpResponseDto.setSucceeded(false);
             signUpResponseDto.setEmailError(true);
         } else {
             try {
-                userRepository.save(user);
+                User user1 = User.builder()
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .email(user.getEmail())
+                        .password(user.getPassword()).phone(user.getPhone()).role(1).isAdmin(false).build();
+                userRepository.save(user1);
                 signUpResponseDto.setSucceeded(true);
                 signUpResponseDto.setEmailError(false);
             } catch (Exception exception) {
