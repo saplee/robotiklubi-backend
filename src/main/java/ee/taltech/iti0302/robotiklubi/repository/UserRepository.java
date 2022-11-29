@@ -9,5 +9,5 @@ public interface UserRepository extends JpaRepositoryImplementation<User, Long> 
 
     List<User> findAllByRole(Integer roleId);
 
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmailIgnoreCase(String email);
 }

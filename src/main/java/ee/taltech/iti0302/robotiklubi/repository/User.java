@@ -1,11 +1,11 @@
 package ee.taltech.iti0302.robotiklubi.repository;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Getter @Setter
+@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+
 @Table(name = "users")
 @Entity
 public class User {
