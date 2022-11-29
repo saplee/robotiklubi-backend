@@ -14,8 +14,8 @@ public class WikiController {
     private final WikiService wikiService;
 
     @PostMapping("/wiki/create")
-    public void createWikiPage(@RequestBody WikiPageDto wikiPageDto) {
-        wikiService.createPage(wikiPageDto);
+    public Long createWikiPage(@RequestBody WikiPageDto wikiPageDto) {
+        return wikiService.createPage(wikiPageDto);
     }
 
     @GetMapping("/wiki/{id}")
