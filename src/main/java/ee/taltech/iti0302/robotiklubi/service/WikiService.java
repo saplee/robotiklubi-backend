@@ -34,7 +34,7 @@ public class WikiService {
 
     private final WikiCriteriaRepository wikiCriteriaRepository;
 
-    public void createPage(WikiPageDto wikiPageDto) {
+    public Long createPage(WikiPageDto wikiPageDto) {
         try {
             WikiPage page = WikiPage.builder()
                     .title(wikiPageDto.getTitle())
@@ -42,6 +42,7 @@ public class WikiService {
                     .authorId(wikiPageDto.getAuthor())
                     .build();
             wikiRepository.save(page);
+            return page.getId();
         } catch (Exception e) {throw new InternalServerException("Could not create wiki page.", e);}
     }
 
