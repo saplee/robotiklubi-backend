@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface WikiTagRepository extends JpaRepositoryImplementation<WikiTag, Long> {
 
-    Optional<WikiTag> findByTag(String tag);
+    Optional<WikiTag> findByTagIgnoreCase(String tag);
 }
