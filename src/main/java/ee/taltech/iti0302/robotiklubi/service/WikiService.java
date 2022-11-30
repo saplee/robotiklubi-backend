@@ -39,7 +39,6 @@ public class WikiService {
             WikiPage page = WikiPage.builder()
                     .title(wikiPageDto.getTitle())
                     .content(wikiPageDto.getContent())
-                    .authorId(wikiPageDto.getAuthor())
                     .build();
             wikiRepository.save(page);
             return page.getId();
@@ -61,7 +60,6 @@ public class WikiService {
             WikiPage page = pageOptional.get();
             page.setTitle(wikiPageDto.getTitle());
             page.setContent(wikiPageDto.getContent());
-            page.setLastEditedBy(wikiPageDto.getLastEditedBy());
         } catch (Exception e) {throw new InternalServerException("Could not update wiki page (id " + id + ").", e);}
     }
 

@@ -16,14 +16,16 @@ public class WikiPage {
     private String title;
     @Column(name = "content")
     private String content;
-    @Column(name = "author")
-    private Integer authorId;
+    @ManyToOne
+    @JoinColumn(name = "author")
+    private User author;
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
     @Column(name = "last_edited")
     private OffsetDateTime lastEdited;
-    @Column(name = "last_edited_by")
-    private Integer lastEditedBy;
+    @ManyToOne
+    @JoinColumn(name = "last_edited_by")
+    private User lastEditedBy;
 
     @PrePersist
     public void saveCreationTime() {
@@ -38,5 +40,15 @@ public class WikiPage {
 
     public String getSummary() {
         return content.substring(0, Math.min(400, content.length())) + "...";
+    }
+
+    public String getAuthorFullName() {
+        if (author == null) return null;
+        return author.getFullName();
+    }
+
+    public String getLastEditorFullName() {
+        if (lastEditedBy == null) return null;
+        return lastEditedBy.getFullName();
     }
 }
