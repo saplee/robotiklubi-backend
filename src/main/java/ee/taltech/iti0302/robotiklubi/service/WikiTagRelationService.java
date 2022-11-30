@@ -47,4 +47,10 @@ public class WikiTagRelationService {
         if (optionalRelation.isEmpty()) return;
         relationRepository.delete(optionalRelation.get());
     }
+
+    public void deleteRelations(Long pageId, TagListDto tags) {
+        for (TagDto tag : tags.getTags()) {
+            deleteRelation(pageId, tag.getId());
+        }
+    }
 }

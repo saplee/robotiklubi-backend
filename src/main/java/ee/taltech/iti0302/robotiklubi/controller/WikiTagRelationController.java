@@ -22,8 +22,15 @@ public class WikiTagRelationController {
         relationService.createRelations(pageId, tags);
     }
 
-    @DeleteMapping("/tags/relation/delete")
+    // TODO: @DeleteMapping("/tags/relation/delete")
+    @PostMapping("/tags/relation/delete")
     public void deleteRelation(@RequestParam("pageId") Long pageId, @RequestParam("tagId") Long tagId) {
         relationService.deleteRelation(pageId, tagId);
+    }
+
+    // TODO: @DeleteMapping("/tags/relation/delete/many")
+    @PostMapping("/tags/relation/delete/many")
+    public void deleteRelations(@RequestParam("pageId") Long pageId, @RequestBody() TagListDto tags) {
+        relationService.deleteRelations(pageId, tags);
     }
 }

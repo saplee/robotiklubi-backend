@@ -23,12 +23,14 @@ public class WikiController {
         return wikiService.getPageById(id);
     }
 
-    @PutMapping("/wiki/update")
+    // TODO: @PutMapping("/wiki/update")
+    @PostMapping("/wiki/update")
     public void updateWikiPage(@RequestParam("id") Long id, @RequestBody WikiPageDto wikiPageDto) {
         wikiService.updatePage(id, wikiPageDto);
     }
 
-    @DeleteMapping("/wiki/delete")
+    // TODO: @DeleteMapping("/wiki/delete")
+    @PostMapping("/wiki/delete")
     public void deleteWikiPage(@RequestParam("id") Long id) {
         wikiService.deletePage(id);
     }
