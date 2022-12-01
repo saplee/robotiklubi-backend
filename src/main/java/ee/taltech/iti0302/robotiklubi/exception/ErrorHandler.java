@@ -26,8 +26,11 @@ public class ErrorHandler {
     public ResponseEntity<ErrorResponse> handleInternalServerException(InternalServerException e) {
         String longMessage = e.getMessage() + " Reason: " + e.getCause().getMessage();
         log.error(longMessage, e.getCause());
-        if (e.getCause() instanceof NotFoundException || e.getCause() instanceof BadRequestException) {
-            return new ResponseEntity<>(new ErrorResponse(longMessage), HttpStatus.INTERNAL_SERVER_ERROR);
+        if (e.getCause() instanceof NotFoundException) {
+            return new ResponseEntity<>(new ErrorResponse(longMessage), HttpStatus.NOT_FOUND);
+        }
+        if (e.getCause() instanceof BadRequestException) {
+            return new ResponseEntity<>(new ErrorResponse(longMessage), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }

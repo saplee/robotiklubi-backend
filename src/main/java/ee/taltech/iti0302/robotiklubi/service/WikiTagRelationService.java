@@ -42,15 +42,19 @@ public class WikiTagRelationService {
     public void deleteRelation(Long pageId, Long tagId) {
         Optional<WikiPage> pageOptional = wikiRepository.findById(pageId);
         Optional<WikiTag> tagOptional = tagRepository.findById(tagId);
-        if (pageOptional.isEmpty() || tagOptional.isEmpty()) return;
+        if (pageOptional.isEmpty() || tagOptional.isEmpty()) throw new NotFoundException("Page or tag not found.");
         Optional<WikiTagRelation> optionalRelation = relationRepository.findWikiTagRelationByTagAndPage(tagOptional.get(), pageOptional.get());
-        if (optionalRelation.isEmpty()) return;
+        if (optionalRelation.isEmpty()) throw new NotFoundException("Page-tag relation not found.");
         relationRepository.delete(optionalRelation.get());
     }
 
     public void deleteRelations(Long pageId, TagListDto tags) {
         for (TagDto tag : tags.getTags()) {
-            deleteRelation(pageId, tag.getId());
+            try {
+                deleteRelation(pageId, tag.getId());
+            } catch (NotFoundException e) {
+                log.error("A page-tag relation could not be deleted.", e);
+            }
         }
     }
 }
