@@ -1,22 +1,17 @@
-package ee.taltech.iti0302.robotiklubi.controller;
+package ee.taltech.iti0302.robotiklubi.controller.user;
 
-import ee.taltech.iti0302.robotiklubi.dto.user.SignUpResponseDto;
-import ee.taltech.iti0302.robotiklubi.dto.user.SignUpUserDto;
-import ee.taltech.iti0302.robotiklubi.dto.user.UserDto;
-import ee.taltech.iti0302.robotiklubi.repository.User;
+import ee.taltech.iti0302.robotiklubi.dto.user.*;
 import ee.taltech.iti0302.robotiklubi.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -36,5 +31,15 @@ public class UserController {
     @PostMapping("/user/signup")
     public SignUpResponseDto registerUser(@RequestBody SignUpUserDto user) {
         return userService.addUser(user);
+    }
+
+    @PostMapping("/login")
+    public LoginResponseDto login(@RequestBody LoginRequestDto request) {
+        return userService.login(request);
+    }
+
+    @PostMapping("/user/refresh")
+    public RefreshResponseDto refresh(@RequestBody RefreshRequestDto request) {
+        return userService.refresh(request);
     }
 }

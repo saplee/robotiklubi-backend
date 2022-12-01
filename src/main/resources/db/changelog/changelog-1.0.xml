@@ -123,11 +123,18 @@
     <changeSet id="21.11.2022 rviirlaid 4" author="rviirlaid">
         <sql>
             alter table wiki
-            add last_edited_by integer;
+                add last_edited_by integer;
 
             alter table wiki
-            add constraint wiki_users_id_fk
-            foreign key (last_edited_by) references users;
+                add constraint wiki_users_id_fk
+                    foreign key (last_edited_by) references users;
+        </sql>
+    </changeSet>
+    <changeSet id="22.11.2022 miloom 1" author="miloom">
+        <sql>
+            ALTER TABLE users
+            ALTER
+            COLUMN password TYPE varchar(255);
         </sql>
     </changeSet>
 

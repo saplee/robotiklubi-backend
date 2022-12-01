@@ -1,9 +1,12 @@
-package ee.taltech.iti0302.robotiklubi.controller;
+package ee.taltech.iti0302.robotiklubi.controller.wiki;
 
 import ee.taltech.iti0302.robotiklubi.dto.wiki.TagListDto;
 import ee.taltech.iti0302.robotiklubi.service.WikiTagRelationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.robotiklubi.controller;
+package ee.taltech.iti0302.robotiklubi.controller.wiki;
 
 import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
 import ee.taltech.iti0302.robotiklubi.service.TagService;

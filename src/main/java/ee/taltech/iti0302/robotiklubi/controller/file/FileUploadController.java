@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.robotiklubi.controller;
+package ee.taltech.iti0302.robotiklubi.controller.file;
 
 import ee.taltech.iti0302.robotiklubi.service.FileUploadService;
 import lombok.RequiredArgsConstructor;
