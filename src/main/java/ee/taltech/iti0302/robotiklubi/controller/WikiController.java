@@ -13,39 +13,31 @@ public class WikiController {
 
     private final WikiService wikiService;
 
+    @PostMapping("/wiki/create")
+    public Long createWikiPage(@RequestBody WikiPageDto wikiPageDto) {
+        return wikiService.createPage(wikiPageDto);
+    }
+
     @GetMapping("/wiki/{id}")
     public WikiPageDto getWikiPage(@PathVariable("id") Long id) {
         return wikiService.getPageById(id);
     }
 
-    @GetMapping("/wiki/tags")
-    public List<TagDto> getAllTags() {
-        return wikiService.getAllTags();
+    // TODO: @PutMapping("/wiki/update")
+    @PostMapping("/wiki/update")
+    public void updateWikiPage(@RequestParam("id") Long id, @RequestBody WikiPageDto wikiPageDto) {
+        wikiService.updatePage(id, wikiPageDto);
+    }
+
+    // TODO: @DeleteMapping("/wiki/delete")
+    @PostMapping("/wiki/delete")
+    public void deleteWikiPage(@RequestParam("id") Long id) {
+        wikiService.deletePage(id);
     }
 
     @GetMapping("/wiki/tags/{id}")
     public List<TagDto> getWikiPageTags(@PathVariable("id") Long id) {
         return wikiService.getPageTags(id);
-    }
-
-    @GetMapping("/wiki/tag/{id}")
-    public List<WikiPageMetaDataDto> getPagesDataByTag(@PathVariable("id") Long tagId) {
-        return wikiService.getPagesByTag(tagId);
-    }
-
-    @PostMapping("/wiki/create")
-    public void createWikiPage(@RequestBody WikiPageDto wikiPageDto) {
-        wikiService.createPage(wikiPageDto);
-    }
-
-    @PutMapping("/wiki/update")
-    public void updateWikiPage(@RequestParam("id") Long id, @RequestBody WikiPageDto wikiPageDto) {
-        wikiService.updatePage(id, wikiPageDto);
-    }
-
-    @DeleteMapping("/wiki/delete")
-    public void deleteWikiPage(@RequestParam("id") Long id) {
-        wikiService.deletePage(id);
     }
 
     @PostMapping ("/wiki/search")

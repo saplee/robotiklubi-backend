@@ -1,7 +1,7 @@
 package ee.taltech.iti0302.robotiklubi.service;
 
 import ee.taltech.iti0302.robotiklubi.dto.wiki.*;
-import ee.taltech.iti0302.robotiklubi.exception.ApplicationException;
+import ee.taltech.iti0302.robotiklubi.exception.InternalServerException;
 import ee.taltech.iti0302.robotiklubi.exception.NotFoundException;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMapper;
 import ee.taltech.iti0302.robotiklubi.mappers.wiki.WikiPageMetaDataMapper;
@@ -28,65 +28,56 @@ public class WikiService {
     private final WikiPageMapper wikiPageMapper;
     private final WikiPageMetaDataMapper wikiPageMetaDataMapper;
 
-    private final WikiTagRepository wikiTagRepository;
     private final WikiTagMapper wikiTagMapper;
 
     private final WikiTagRelationRepository wikiTagRelationRepository;
 
     private final WikiCriteriaRepository wikiCriteriaRepository;
 
-    public WikiPageDto getPageById(Long id) {
-        Optional<WikiPage> pageOptional = wikiRepository.findById(id);
-        if (pageOptional.isPresent()) return wikiPageMapper.toDto(pageOptional.get());
-        throw new NotFoundException(PAGE_NOT_FOUND);
-    }
-
-    public List<TagDto> getAllTags() {
-        return wikiTagMapper.toDtoList(wikiTagRepository.findAll());
-    }
-
-    public List<TagDto> getPageTags(Long id) {
-        List<WikiTag> tags = wikiTagRelationRepository.findAllByPageId(id).stream().map(WikiTagRelation::getTag).toList();
-        return wikiTagMapper.toDtoList(tags);
-    }
-
-    public List<WikiPageMetaDataDto> getPagesByTag(Long id) {
-        List<WikiPage> pages = wikiTagRelationRepository.findAllByTagId(id).stream().map(WikiTagRelation::getPage).toList();
-        return wikiPageMetaDataMapper.toDtoList(pages);
-    }
-
-    public void createPage(WikiPageDto wikiPageDto) {
+    public Long createPage(WikiPageDto wikiPageDto) {
         try {
             WikiPage page = WikiPage.builder()
                     .title(wikiPageDto.getTitle())
                     .content(wikiPageDto.getContent())
-                    .authorId(wikiPageDto.getAuthor())
                     .build();
             wikiRepository.save(page);
-        } catch (Exception e) {
-            throw new ApplicationException("Could not create wiki page.");
-        }
+            return page.getId();
+        } catch (Exception e) {throw new InternalServerException("Could not create wiki page.", e);}
+    }
+
+    public WikiPageDto getPageById(Long id) {
+        try {
+            Optional<WikiPage> pageOptional = wikiRepository.findById(id);
+            if (pageOptional.isPresent()) return wikiPageMapper.toDto(pageOptional.get());
+            throw new NotFoundException(PAGE_NOT_FOUND);
+        } catch (Exception e) {throw new InternalServerException("Could not retrieve wiki page (id " + id + ").", e);}
     }
 
     public void updatePage(Long id, WikiPageDto wikiPageDto) {
-        Optional<WikiPage> pageOptional = wikiRepository.findById(id);
-        if (pageOptional.isEmpty()) throw new NotFoundException(PAGE_NOT_FOUND);
         try {
+            Optional<WikiPage> pageOptional = wikiRepository.findById(id);
+            if (pageOptional.isEmpty()) throw new NotFoundException(PAGE_NOT_FOUND);
             WikiPage page = pageOptional.get();
             page.setTitle(wikiPageDto.getTitle());
             page.setContent(wikiPageDto.getContent());
-            page.setLastEditedBy(wikiPageDto.getLastEditedBy());
-            wikiRepository.save(page);
-        } catch (Exception e) {
-            throw new ApplicationException("Could not update wiki page.");
-        }
+        } catch (Exception e) {throw new InternalServerException("Could not update wiki page (id " + id + ").", e);}
     }
 
     public void deletePage(Long id) {
-        Optional<WikiPage> pageOptional = wikiRepository.findById(id);
-        pageOptional.ifPresentOrElse(
-                wikiRepository::delete,
-                () -> {throw new NotFoundException(PAGE_NOT_FOUND);});
+        try {
+            Optional<WikiPage> pageOptional = wikiRepository.findById(id);
+            if (pageOptional.isEmpty()) throw new NotFoundException(PAGE_NOT_FOUND);
+            List<WikiTagRelation> relations = wikiTagRelationRepository.findAllByPage(pageOptional.get());
+            wikiTagRelationRepository.deleteAll(relations);
+            wikiRepository.delete(pageOptional.get());
+        } catch (Exception e) {throw new InternalServerException("Could not delete wiki page (id " + id + ").", e);}
+    }
+
+    public List<TagDto> getPageTags(Long id) {
+        try {
+            List<WikiTag> tags = wikiTagRelationRepository.findAllByPageId(id).stream().map(WikiTagRelation::getTag).toList();
+            return wikiTagMapper.toDtoList(tags);
+        } catch (Exception e) {throw new InternalServerException("Could not retrieve tags for wiki page (id " + id + ").", e);}
     }
 
     public WikiSearchResult findAllByCriteria(WikiSearchCriteria searchCriteria) {

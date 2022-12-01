@@ -26,4 +26,8 @@ public class User {
     private Integer role;
     @Column(name = "is_admin")
     private Boolean isAdmin;
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface WikiPageMetaDataMapper {
 
+    @Mapping(expression = "java(wikiPage.getAuthorFullName())", target = "authorName")
     @Mapping(expression = "java(wikiPage.getSummary())", target = "summary")
     WikiPageMetaDataDto toDto(WikiPage wikiPage);
 

@@ -12,8 +12,10 @@ public class WikiPageDto {
     private Long id;
     private String title;
     private String content;
-    private Integer author;
-    private Integer lastEditedBy;
+    private Integer authorId;
+    private String authorName;
+    private Integer lastEditorId;
+    private String lastEditorName;
     private OffsetDateTime createdAt;
     private OffsetDateTime lastEdited;
 }

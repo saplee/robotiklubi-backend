@@ -12,7 +12,7 @@ public class WikiPageMetaDataDto {
     private Long id;
     private String title;
     private String summary;
-    private Integer author;
+    private String authorName;
     private OffsetDateTime createdAt;
     private OffsetDateTime lastEdited;
 }
