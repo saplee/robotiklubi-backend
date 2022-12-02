@@ -33,7 +33,7 @@ public class UserController {
         return userService.addUser(user);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public LoginResponseDto login(@RequestBody LoginRequestDto request) {
         return userService.login(request);
     }

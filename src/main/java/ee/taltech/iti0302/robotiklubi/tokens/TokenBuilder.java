@@ -40,7 +40,7 @@ public class TokenBuilder {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            throw new TokenParseException("Token parsing failed: " + token, e);
+            throw new TokenParseException("Token parsing failed", e);
         }
     }
 

@@ -25,7 +25,7 @@ public class SecurityConfiguration {
         http
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests(auth -> auth
-                        .antMatchers("/login", "/signup", "/test", "/test/**", "/users/**", "/process").permitAll()
+                        .antMatchers("/user/login", "/signup", "/test", "/test/**", "/users/**", "/process").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

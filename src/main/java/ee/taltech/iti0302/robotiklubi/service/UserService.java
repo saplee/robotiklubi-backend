@@ -91,6 +91,7 @@ public class UserService {
                 TokenBuilder.fromToken(refreshRequest.getAccessToken()).get("id", Long.class),
                 TokenBuilder.fromToken(refreshRequest.getAccessToken()).get("auth", Integer.class),
                 REFRESH_TOKEN_EXPIRATION_TIME_S));
+        refreshResponse.setSucceeded(true);
         return refreshResponse;
     }
 }
