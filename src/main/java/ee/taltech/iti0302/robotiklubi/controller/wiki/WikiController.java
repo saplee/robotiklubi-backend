@@ -35,7 +35,7 @@ public class WikiController {
 
     // TODO: @DeleteMapping("/wiki/delete")
     // @PreAuthorize("hasAnyAuthority('MANAGEMENT')")
-    @DeleteMapping("/wiki/delete")
+    @PostMapping("/wiki/delete")
     public void deleteWikiPage(@RequestParam("id") Long id) {
         wikiService.deletePage(id);
     }
