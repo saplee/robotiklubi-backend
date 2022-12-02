@@ -6,7 +6,6 @@ import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiSearchCriteria;
 import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiSearchResult;
 import ee.taltech.iti0302.robotiklubi.service.WikiService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,14 +27,14 @@ public class WikiController {
     }
 
     // TODO: @PutMapping("/wiki/update")
-    @PreAuthorize("hasAnyAuthority('MANAGEMENT')")
+    // @PreAuthorize("hasAnyAuthority('MANAGEMENT')")
     @PostMapping("/wiki/update")
     public void updateWikiPage(@RequestParam("id") Long id, @RequestBody WikiPageDto wikiPageDto) {
         wikiService.updatePage(id, wikiPageDto);
     }
 
     // TODO: @DeleteMapping("/wiki/delete")
-    @PreAuthorize("hasAnyAuthority('MANAGEMENT')")
+    // @PreAuthorize("hasAnyAuthority('MANAGEMENT')")
     @DeleteMapping("/wiki/delete")
     public void deleteWikiPage(@RequestParam("id") Long id) {
         wikiService.deletePage(id);
