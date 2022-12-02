@@ -5,7 +5,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SignUpResponseDto {
+public class RefreshResponseDto {
+    String accessToken;
+    String refreshToken;
     boolean succeeded;
-    boolean emailError;
+
 }

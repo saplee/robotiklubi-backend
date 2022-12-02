@@ -33,10 +33,6 @@ public class ProcessFilesService {
             File localFile = new File(basePath.toAbsolutePath() + uploadsFolder + fileName);
             file.transferTo(localFile);
 
-            Runtime rt = Runtime.getRuntime();
-            String[] command = {"curaengine slice -j /opt/PrinterConfigs/RobotiklubiConf.def.json" +
-                    " -l " + uploadsFolder + fileName + " -o " +
-                    uploadsFolder + gcodeFileName};
             Process pr = new ProcessBuilder("curaengine", "slice", "-j", "/opt/PrinterConfigs/RobotiklubiConf.def.json", "-l",
                     uploadsFolder + fileName, "-o", uploadsFolder + gcodeFileName).start();
 

@@ -1,16 +1,17 @@
 package ee.taltech.iti0302.robotiklubi.service;
 
-import ee.taltech.iti0302.robotiklubi.dto.user.SignUpResponseDto;
-import ee.taltech.iti0302.robotiklubi.dto.user.SignUpUserDto;
-import ee.taltech.iti0302.robotiklubi.dto.user.UserDto;
+import ee.taltech.iti0302.robotiklubi.dto.user.*;
 import ee.taltech.iti0302.robotiklubi.mappers.user.UserMapper;
 import ee.taltech.iti0302.robotiklubi.repository.User;
 import ee.taltech.iti0302.robotiklubi.repository.UserRepository;
+import ee.taltech.iti0302.robotiklubi.tokens.TokenBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -18,29 +19,38 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private static final long TOKEN_EXPIRATION_TIME_S = 60L * 60L;
+    private static final long REFRESH_TOKEN_EXPIRATION_TIME_S = 60L * 60L * 24L;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public List<UserDto> getAllRegularMembers() {
         return userMapper.toDtoList(userRepository.findAllByRole(2));
     }
+
     @Transactional(readOnly = true)
     public List<UserDto> getAllManagement() {
         return userMapper.toDtoList(userRepository.findAllByRole(4));
     }
+
     @Transactional
     public SignUpResponseDto addUser(SignUpUserDto user) {
-        SignUpResponseDto signUpResponseDto = new SignUpResponseDto();
+        SignUpResponseDto signUpResponseDto = SignUpResponseDto.builder().build();
         if (userRepository.findByEmailIgnoreCase(user.getEmail()).isPresent()) {
             signUpResponseDto.setSucceeded(false);
             signUpResponseDto.setEmailError(true);
         } else {
             try {
-                User user1 = User.builder()
+                User tempUser = User.builder()
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
                         .email(user.getEmail())
-                        .password(user.getPassword()).phone(user.getPhone()).role(1).isAdmin(false).build();
-                userRepository.save(user1);
+                        .password(passwordEncoder.encode(user.getPassword()))
+                        .phone(user.getPhone())
+                        .role(1)
+                        .isAdmin(false)
+                        .build();
+                userRepository.save(tempUser);
                 signUpResponseDto.setSucceeded(true);
                 signUpResponseDto.setEmailError(false);
             } catch (Exception exception) {
@@ -49,5 +59,39 @@ public class UserService {
             }
         }
         return signUpResponseDto;
+    }
+
+    @Transactional
+    public LoginResponseDto login(LoginRequestDto loginRequest) {
+        LoginResponseDto loginResponse = LoginResponseDto.builder().build();
+        Optional<User> user = userRepository.findByEmailIgnoreCase(loginRequest.getEmail());
+        if (user.isPresent() && passwordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())) {
+            loginResponse.setSucceeded(true);
+            loginResponse.setAccessToken(TokenBuilder.createToken(
+                    user.get().getId(),
+                    user.get().getRole(),
+                    TOKEN_EXPIRATION_TIME_S));
+            loginResponse.setRefreshToken(TokenBuilder.createToken(
+                    user.get().getId(),
+                    user.get().getRole(),
+                    REFRESH_TOKEN_EXPIRATION_TIME_S));
+
+        }
+        return loginResponse;
+    }
+
+    @Transactional
+    public RefreshResponseDto refresh(RefreshRequestDto refreshRequest) {
+        RefreshResponseDto refreshResponse = RefreshResponseDto.builder().build();
+        refreshResponse.setAccessToken(TokenBuilder.createToken(
+                TokenBuilder.fromToken(refreshRequest.getAccessToken()).get("id", Long.class),
+                TokenBuilder.fromToken(refreshRequest.getAccessToken()).get("auth", Integer.class),
+                TOKEN_EXPIRATION_TIME_S));
+        refreshResponse.setRefreshToken(TokenBuilder.createToken(
+                TokenBuilder.fromToken(refreshRequest.getAccessToken()).get("id", Long.class),
+                TokenBuilder.fromToken(refreshRequest.getAccessToken()).get("auth", Integer.class),
+                REFRESH_TOKEN_EXPIRATION_TIME_S));
+        refreshResponse.setSucceeded(true);
+        return refreshResponse;
     }
 }

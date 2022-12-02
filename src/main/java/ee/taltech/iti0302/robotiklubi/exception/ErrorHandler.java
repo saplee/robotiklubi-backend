@@ -35,6 +35,12 @@ public class ErrorHandler {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(TokenParseException.class)
+    public ResponseEntity<ErrorResponse> handleTokenParseException(TokenParseException e) {
+        log.error(e.getMessage(), e);
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("An unknown error has occurred.", e);
