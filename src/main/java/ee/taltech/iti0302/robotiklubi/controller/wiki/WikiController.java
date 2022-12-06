@@ -16,6 +16,7 @@ public class WikiController {
 
     private final WikiService wikiService;
 
+//    @PreAuthorize("hasAnyAuthority('MEMBER')")
     @PostMapping("/wiki/create")
     public Long createWikiPage(@RequestBody WikiPageDto wikiPageDto) {
         return wikiService.createPage(wikiPageDto);
@@ -26,16 +27,14 @@ public class WikiController {
         return wikiService.getPageById(id);
     }
 
-    // TODO: @PutMapping("/wiki/update")
-    // @PreAuthorize("hasAnyAuthority('MANAGEMENT')")
-    @PostMapping("/wiki/update")
+//    @PreAuthorize("hasAnyAuthority('MEMBER')")
+    @PutMapping("/wiki/update")
     public void updateWikiPage(@RequestParam("id") Long id, @RequestBody WikiPageDto wikiPageDto) {
         wikiService.updatePage(id, wikiPageDto);
     }
 
-    // TODO: @DeleteMapping("/wiki/delete")
-    // @PreAuthorize("hasAnyAuthority('MANAGEMENT')")
-    @PostMapping("/wiki/delete")
+//    @PreAuthorize("hasAnyAuthority('MEMBER')")
+    @DeleteMapping("/wiki/delete")
     public void deleteWikiPage(@RequestParam("id") Long id) {
         wikiService.deletePage(id);
     }
