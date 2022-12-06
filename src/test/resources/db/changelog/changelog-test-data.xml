@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <include file="db/changelog/changelog-1.0.xml"/>
+    <changeSet id="get wiki page" author="Sander Pleesi">
+        <insert tableName="wiki">
+            <column name="id" value="87000"/>
+            <column name="title" value="Some title"/>
+            <column name="content" value="Some content"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
