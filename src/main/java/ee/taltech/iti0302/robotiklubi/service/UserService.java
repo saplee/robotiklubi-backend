@@ -96,10 +96,10 @@ public class UserService {
         return refreshResponse;
     }
 
-    public UserDto getUserInfo(String idString) {
+    public UserDetailedDto getUserInfo(String idString) {
         Long id = Long.valueOf(idString);
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) throw new NotFoundException("User not found.");
-        return userMapper.toDto(user.get());
+        return userMapper.toDetailedDto(user.get());
     }
 }

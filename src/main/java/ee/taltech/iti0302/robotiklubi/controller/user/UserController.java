@@ -21,8 +21,8 @@ public class UserController {
     private final UserService userService;
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("/users/")
-    public UserDto getUserData(Principal principal) {
+    @GetMapping("/users/data")
+    public UserDetailedDto getUserData(Principal principal) {
         return userService.getUserInfo(principal.getName());
     }
 
