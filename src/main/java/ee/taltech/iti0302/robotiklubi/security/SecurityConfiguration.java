@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                 .authorizeRequests(auth -> auth
                         .antMatchers(
                                 "/user/**", "/test", "/users/**", "/process", "/swagger-ui/**", "/v3/api-docs/**",
-                                "/tags/**", "/wiki/**").permitAll()
+                                "/tags/**", "/wiki/**", "/process/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
