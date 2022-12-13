@@ -42,6 +42,7 @@ public class ProcessFilesService {
                     uploadsFolder + fileName, "-o", uploadsFolder + gcodeFileName).start();
 
             logOutputs(pr);
+
             if (!isGcodeFilePresent(gcodeFileName)) {
                 throw new FileProcessingException("Gcode file not found");
             }
