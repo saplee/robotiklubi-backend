@@ -55,13 +55,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private UsernamePasswordAuthenticationToken buildAuthToken(Claims tokenBody) {
         return switch (tokenBody.get("auth", Integer.class)) {
-            case 0 -> new UsernamePasswordAuthenticationToken(tokenBody.get("id", Long.class), null,
-                    List.of(new SimpleGrantedAuthority("USER")));
             case 1 -> new UsernamePasswordAuthenticationToken(tokenBody.get("id", Long.class), null,
-                    List.of(new SimpleGrantedAuthority("USER"), new SimpleGrantedAuthority("MEMBER")));
+                    List.of(new SimpleGrantedAuthority("USER")));
             case 2 -> new UsernamePasswordAuthenticationToken(tokenBody.get("id", Long.class), null,
-                    List.of(new SimpleGrantedAuthority("USER"), new SimpleGrantedAuthority("FORMER_MEMBER")));
+                    List.of(new SimpleGrantedAuthority("USER"), new SimpleGrantedAuthority("MEMBER")));
             case 3 -> new UsernamePasswordAuthenticationToken(tokenBody.get("id", Long.class), null,
+                    List.of(new SimpleGrantedAuthority("USER"), new SimpleGrantedAuthority("FORMER_MEMBER")));
+            case 4 -> new UsernamePasswordAuthenticationToken(tokenBody.get("id", Long.class), null,
                     List.of(new SimpleGrantedAuthority("USER"), new SimpleGrantedAuthority("MEMBER"),
                             new SimpleGrantedAuthority("FORMER_MEMBER"),
                             new SimpleGrantedAuthority("MANAGEMENT")));

@@ -1,6 +1,7 @@
 package ee.taltech.iti0302.robotiklubi.service;
 
 import ee.taltech.iti0302.robotiklubi.dto.user.*;
+import ee.taltech.iti0302.robotiklubi.exception.NotFoundException;
 import ee.taltech.iti0302.robotiklubi.mappers.user.UserMapper;
 import ee.taltech.iti0302.robotiklubi.repository.User;
 import ee.taltech.iti0302.robotiklubi.repository.UserRepository;
@@ -93,5 +94,12 @@ public class UserService {
                 REFRESH_TOKEN_EXPIRATION_TIME_S));
         refreshResponse.setSucceeded(true);
         return refreshResponse;
+    }
+
+    public UserDetailedDto getUserInfo(String idString) {
+        Long id = Long.valueOf(idString);
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) throw new NotFoundException("User not found.");
+        return userMapper.toDetailedDto(user.get());
     }
 }

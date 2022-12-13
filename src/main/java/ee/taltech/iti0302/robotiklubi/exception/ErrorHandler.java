@@ -3,8 +3,10 @@ package ee.taltech.iti0302.robotiklubi.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
 
 @Slf4j
 @ControllerAdvice
@@ -37,8 +39,14 @@ public class ErrorHandler {
 
     @ExceptionHandler(TokenParseException.class)
     public ResponseEntity<ErrorResponse> handleTokenParseException(TokenParseException e) {
-        log.error(e.getMessage(), e);
+        log.error("Caught TokenParseException.");
         return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+        log.error("Caught AccessDeniedException.", e);
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(FileProcessingException.class)

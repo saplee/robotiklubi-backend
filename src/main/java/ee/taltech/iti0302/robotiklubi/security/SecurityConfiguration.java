@@ -3,6 +3,7 @@ package ee.taltech.iti0302.robotiklubi.security;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @AllArgsConstructor
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
     private final JwtRequestFilter jwtRequestFilter;
@@ -27,7 +29,7 @@ public class SecurityConfiguration {
                 .authorizeRequests(auth -> auth
                         .antMatchers(
                                 "/user/**", "/test", "/users/**", "/process", "/swagger-ui/**", "/v3/api-docs/**",
-                                "/wiki/**", "/tags/**", "/process/**").permitAll()
+                                "/tags/**", "/wiki/**", "/process/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

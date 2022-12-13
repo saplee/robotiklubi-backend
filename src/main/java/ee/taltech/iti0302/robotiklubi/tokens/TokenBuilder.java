@@ -39,7 +39,8 @@ public class TokenBuilder {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
+            // TODO: the ErrorHandler cannot catch this for some reason
             throw new TokenParseException("Token parsing failed", e);
         }
     }
