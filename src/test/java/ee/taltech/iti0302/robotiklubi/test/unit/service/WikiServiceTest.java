@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.robotiklubi.test.unit;
+package ee.taltech.iti0302.robotiklubi.test.unit.service;
 
 import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
 
@@ -27,7 +27,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class WikiServiceTest {
+class WikiServiceTest {
 
     @Mock
     private WikiRepository wikiRepository;
