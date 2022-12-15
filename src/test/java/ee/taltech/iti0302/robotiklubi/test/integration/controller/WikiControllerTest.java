@@ -12,8 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,5 +63,20 @@ class WikiControllerTest extends AbstractIntegrationTest {
 //                .content(objectMapper.writeValueAsString(wikiPage))).andExpect(status().isOk());
 //
 //    }
-
+//    @Test
+//    void update() throws Exception {
+//        WikiPageDto wikiPage = WikiPageDto.builder().title("New title").content("New content").build();
+//        mvc.perform(put("/wiki/edit").param("id", "87000").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(wikiPage)))
+//                .andExpect(status().isOk());
+//    }
+    @Test
+    void deleteFails() throws Exception {
+        mvc.perform(delete("/wiki/delete").param("id", "87000"))
+                .andExpect(status().isForbidden());
+    }
+//    @Test
+//    void delete() throws Exception {
+//        mvc.perform(put("/wiki/delete").param("id", "87000"))
+//                .andExpect(status().isOk());
+//    }
 }
