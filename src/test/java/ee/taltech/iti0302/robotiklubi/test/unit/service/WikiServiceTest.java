@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.robotiklubi.test.unit;
+package ee.taltech.iti0302.robotiklubi.test.unit.service;
 
 import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
 
