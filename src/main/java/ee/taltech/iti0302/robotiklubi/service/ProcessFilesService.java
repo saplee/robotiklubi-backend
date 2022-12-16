@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,25 +28,22 @@ import java.util.Map;
 @Slf4j
 public class ProcessFilesService {
 
+    private static final int MAX_AMOUNT_TO_PROCESS = 100;
+    private static final Float PLA_DENSITY = 0.00124f; // g/mm^3
+
     private final OrderRepository orderRepository;
     private final ClientRepository clientRepository;
     private final OrderMapper orderMapper;
 
+
     @Transactional
-    public OrderResponseDto processFiles(MultipartFile file, String firstName, String lastName, String email,
-                                         String phone) {
+    public OrderResponseDto queueFile(MultipartFile file, String firstName, String lastName, String email,
+                                      String phone) {
         try {
-            String uploadsFolder = "/uploads/";
             String fileName = file.getOriginalFilename();
             if (fileName == null) return new OrderResponseDto(false);
-
             fileName = fileName.replace(" ", "_");
             String gcodeFileName = fileName.substring(0, fileName.length() - 4) + ".gcode";
-
-            Path basePath = Paths.get("");
-            File localFile = new File(basePath.toAbsolutePath() + uploadsFolder + fileName);
-            file.transferTo(localFile);
-
             Long id = clientRepository.save(Client.builder()
                     .firstName(firstName)
                     .lastName(lastName)
@@ -62,39 +57,74 @@ public class ProcessFilesService {
                     .sliced(false)
                     .printed(false)
                     .build();
-            Long orderId = orderRepository.save(order).getId();
-
-            Process pr = new ProcessBuilder("curaengine", "slice", "-j", "/opt/PrinterConfigs/RobotiklubiConf.def.json",
-                    "-l",
-                    uploadsFolder + fileName, "-o", uploadsFolder + gcodeFileName).start();
-
-            File gcodeFile = new File(basePath.toAbsolutePath() + uploadsFolder + gcodeFileName);
-
-            Map<GcodeValues, Float> data = getGcodeData(pr);
-
-            orderRepository.findById(orderId).ifPresent(o -> {
-                o.setSliced(true);
-                try {
-                    o.setFileGcode(Files.readAllBytes(gcodeFile.toPath()));
-                } catch (IOException e) {
-                    throw new FileProcessingException("Error while reading gcode file");
-                }
-                o.setLayerCount(data.get(GcodeValues.LAYER_COUNT).intValue());
-                o.setLayerHeight(data.get(GcodeValues.LAYER_HEIGHT));
-                o.setMaterialUsed(data.get(GcodeValues.MATERIAL_USED));
-                o.setPrintTime(data.get(GcodeValues.PRINT_TIME).intValue());
-                o.setPrice(calculatePrice(o));
-                orderRepository.save(o);
-            });
-
+            orderRepository.save(order);
             return new OrderResponseDto(true);
         } catch (IOException e) {
+            throw new FileProcessingException("Error while queueing file");
+        }
+
+    }
+
+    @Transactional
+    public void processFiles() {
+        List<Order> orders = orderRepository.findAllBySliced(false);
+        orders.sort((o1, o2) -> o1.getId().compareTo(o2.getId()));
+        orders = orders.stream().limit(MAX_AMOUNT_TO_PROCESS).toList();
+        try {
+            for (Order order : orders) {
+                String processingFolder = "/processing/";
+                String stlFileName = order.getFileName().substring(0, order.getFileName().lastIndexOf(".")) + ".stl";
+
+                Path basePath = Paths.get("");
+                File localStlFile = new File(basePath.toAbsolutePath() + processingFolder + stlFileName);
+                localStlFile.getParentFile().mkdirs();
+
+                writeDataToFile(localStlFile, order.getFileStl());
+                String gcodeFileName = order.getFileName();
+                Process pr =
+                        new ProcessBuilder("curaengine", "slice", "-j", "/opt/PrinterConfigs/RobotiklubiConf.def.json",
+                                "-l",
+                                processingFolder + stlFileName, "-o", processingFolder + gcodeFileName).start();
+                pr.waitFor();
+                Map<GcodeValues, Float> data = getGcodeData(pr);
+                File gcodeFile = new File(basePath.toAbsolutePath() + processingFolder + gcodeFileName);
+                if (!Files.deleteIfExists(localStlFile.toPath())) {
+                    throw new FileProcessingException(
+                            "STL File could not be found for deletion " + localStlFile.toPath());
+                }
+                orderRepository.findById(order.getId()).ifPresent(o -> {
+                    o.setSliced(true);
+                    try {
+                        o.setFileGcode(Files.readAllBytes(gcodeFile.toPath()));
+                    } catch (IOException e) {
+                        throw new FileProcessingException("Error while reading gcode file");
+                    }
+                    o.setLayerCount(data.get(GcodeValues.LAYER_COUNT).intValue());
+                    o.setLayerHeight(data.get(GcodeValues.LAYER_HEIGHT));
+                    o.setMaterialUsed(data.get(GcodeValues.MATERIAL_USED));
+                    o.setPrintTime(data.get(GcodeValues.PRINT_TIME).intValue());
+                    o.setPrice(calculatePrice(o));
+                    orderRepository.save(o);
+                });
+            }
+        } catch (IOException e) {
             throw new FileProcessingException("File processing failed");
+        } catch (InterruptedException e) {
+            log.error("Thread interrupted", e);
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private void writeDataToFile(File file, byte[] data) {
+        try (OutputStream os = new FileOutputStream(file)) {
+            os.write(data);
+        } catch (IOException e) {
+            throw new FileProcessingException("Error while writing data to file");
         }
     }
 
     private Float calculatePrice(Order order) {
-        return order.getLayerCount() * order.getLayerHeight() * order.getMaterialUsed();
+        return 3 + order.getMaterialUsed() * PLA_DENSITY * 0.1f + (int) (order.getPrintTime() / 3600D) * 1.5f;
     }
 
     @Transactional()

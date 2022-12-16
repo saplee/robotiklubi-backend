@@ -13,6 +13,7 @@ public class StatusResponseDto {
     private Integer printTime;
     private String fileName;
     private Double materialUsed;
+    private Double price;
 
     public StatusResponseDto(String status, OrderDto orderDto) {
         this.status = status;
@@ -21,6 +22,7 @@ public class StatusResponseDto {
         this.printTime = orderDto.getPrintTime();
         this.fileName = orderDto.getFileName();
         this.materialUsed = orderDto.getMaterialUsed();
+        this.price = orderDto.getPrice();
     }
 
 }

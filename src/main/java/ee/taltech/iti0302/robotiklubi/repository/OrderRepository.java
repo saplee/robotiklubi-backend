@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepositoryImplementation<Order, Long> {
     List<Order> findAllByClientId(Long id);
+
+    List<Order> findAllBySliced(Boolean sliced);
 }
