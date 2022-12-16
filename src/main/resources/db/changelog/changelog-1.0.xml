@@ -137,5 +137,37 @@
             COLUMN password TYPE varchar(255);
         </sql>
     </changeSet>
+    <changeSet id="15.12.2022 miloom 1" author="miloom">
+        <createTable tableName="orders">
+            <column name="id" type="serial">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="file_name" type="char(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_stl" type="bytea">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_gcode" type="bytea"/>
+            <column name="client_id" type="int">
+                <constraints nullable="false" foreignKeyName="fk_orders_clients" referencedTableName="clients"
+                             referencedColumnNames="id"/>
+            </column>
+            <column name="created_at" type="timestamptz"/>
+            <column name="sliced" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sliced_at" type="timestamptz"/>
+            <column name="printed" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="printed_at" type="timestamptz"/>
+            <column name="layer_count" type="int"/>
+            <column name="print_time" type="int"/>
+            <column name="material_used" type="float"/>
+            <column name="layer_height" type="float"/>
+            <column name="price" type="float"/>
+        </createTable>
+    </changeSet>
 
 </databaseChangeLog>
