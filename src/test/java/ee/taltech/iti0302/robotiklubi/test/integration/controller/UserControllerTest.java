@@ -3,6 +3,7 @@ package ee.taltech.iti0302.robotiklubi.test.integration.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.taltech.iti0302.robotiklubi.dto.user.LoginRequestDto;
 
+import ee.taltech.iti0302.robotiklubi.dto.user.RefreshRequestDto;
 import ee.taltech.iti0302.robotiklubi.dto.user.SignUpUserDto;
 
 import ee.taltech.iti0302.robotiklubi.test.integration.AbstractIntegrationTest;
@@ -12,9 +13,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.Map;
+
+import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -83,5 +90,35 @@ class UserControllerTest extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequestDto))).andExpect(status().isOk()).andExpect(jsonPath("$.accessToken").isString());
 
+    }
+    @Test
+    void tokenRefresh() throws Exception {
+        LoginRequestDto loginRequestDto = new LoginRequestDto();
+        loginRequestDto.setEmail("k.k@mail.ee");
+        loginRequestDto.setPassword("abc");
+        // Get original tokens
+        MvcResult response = mvc.perform(post("/user/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginRequestDto)))
+                .andExpect(status().isOk()).andReturn();
+        // Extract token from response
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String,Object> map = mapper.readValue(response.getResponse().getContentAsString(), Map.class);
+        String oldAccessToken = (String) map.get("accessToken");
+        String oldRefreshToken = (String) map.get("refreshToken");
+        System.out.println(oldAccessToken);
+        System.out.println(oldRefreshToken);
+        // Refresh the token
+        sleep(1000L);
+        RefreshRequestDto refreshRequestDto = new RefreshRequestDto();
+        refreshRequestDto.setAccessToken(oldAccessToken);
+        MvcResult refreshResponse = mvc.perform(post("/user/refresh").header("Authorization", oldRefreshToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(refreshRequestDto)))
+                .andExpect(status().isOk()).andReturn();
+        // Check response
+        Map<String,Object> map2 = mapper.readValue(refreshResponse.getResponse().getContentAsString(), Map.class);
+        System.out.println((String) map2.get("accessToken"));
+        System.out.println((String) map2.get("refreshToken"));
     }
 }
