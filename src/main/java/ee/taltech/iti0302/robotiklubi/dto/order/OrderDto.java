@@ -11,4 +11,5 @@ public class OrderDto {
     private Integer printTime;
     private String fileName;
     private Double materialUsed;
+    private Double price;
 }

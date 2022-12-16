@@ -25,7 +25,7 @@ public class FileProcessorController {
                                          @RequestParam("lastName") String lastName,
                                          @RequestParam("email") String email,
                                          @RequestParam("phone") String phone) {
-        return processFilesService.processFiles(file, firstName, lastName, email, phone);
+        return processFilesService.queueFile(file, firstName, lastName, email, phone);
     }
 
     @PostMapping("/process/status")
