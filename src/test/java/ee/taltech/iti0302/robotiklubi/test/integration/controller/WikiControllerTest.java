@@ -44,9 +44,6 @@ class WikiControllerTest extends AbstractIntegrationTest {
     @Autowired
     private MockMvc mvc;
 
-    @Mock
-    private WikiRepository wikiRepository;
-
     @BeforeEach
     void setSecurityContext() {
         SecurityContext context = SecurityContextHolder.getContext();

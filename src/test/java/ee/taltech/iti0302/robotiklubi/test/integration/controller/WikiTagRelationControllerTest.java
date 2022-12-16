@@ -76,4 +76,14 @@ class WikiTagRelationControllerTest extends AbstractIntegrationTest {
         tagListDto.setTags(tagDtoList);
         mvc.perform(delete("/tags/relation/delete?pageId=12345&tagId=3")).andExpect(status().isOk());
     }
+
+    @Test
+    void deleteTagMany() throws Exception {
+        TagListDto tagListDto = new TagListDto();
+        TagDto tagDto = TagDto.builder().tag("K").id(55L).build();
+        TagDto tagDto2 = TagDto.builder().tag("T").id(56L).build();
+        List<TagDto> tagDtoList = new ArrayList<>(List.of(tagDto2, tagDto));
+        tagListDto.setTags(tagDtoList);
+        mvc.perform(delete("/tags/relation/delete/many?pageId=123").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(tagListDto))).andExpect(status().isOk());
+    }
 }
