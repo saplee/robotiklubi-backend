@@ -11,5 +11,40 @@
             <column name="title" value="Some title"/>
             <column name="content" value="Some content"/>
         </insert>
+        <insert tableName="wiki">
+            <column name="id" value="12345"/>
+            <column name="title" value="Some title"/>
+            <column name="content" value="Some content"/>
+        </insert>
+        <insert tableName="wiki">
+            <column name="id" value="34000"/>
+            <column name="title" value="New title"/>
+            <column name="content" value="New content"/>
+        </insert>
+        <insert tableName="wiki_tags">
+            <column name="id" value="3"/>
+            <column name="tag" value="Game"/>
+        </insert>
+        <insert tableName="wiki_tags">
+            <column name="id" value="66"/>
+            <column name="tag" value="TV"/>
+        </insert>
+        <insert tableName="wiki_tags">
+            <column name="id" value="900"/>
+            <column name="tag" value="Salami"/>
+        </insert>
+        <insert tableName="wiki_tag_relations">
+            <column name= "id" value ="1"/>
+            <column name= "page_id" value ="87000"/>
+            <column name= "tag_id" value ="3"/>
+        </insert>
+        <insert tableName="users">
+            <column name= "id" value ="8000"/>
+            <column name= "firstname" value ="K"/>
+            <column name= "lastname" value ="K"/>
+            <column name= "email" value ="k.k@mail.ee"/>
+            <column name= "password" value ="$2a$13$LvhI77t5b61QGn3KnQIFweyAlayCi5hJ4h9D4I0lOJc./F38FYbkC"/>
+            <column name= "role" value ="2"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>
