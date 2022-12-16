@@ -72,8 +72,8 @@ public class ProcessFilesService {
         List<Order> orders = orderRepository.findAllBySliced(false);
         orders.sort((o1, o2) -> o1.getId().compareTo(o2.getId()));
         orders = orders.stream().limit(MAX_AMOUNT_TO_PROCESS).toList();
-        try {
-            for (Order order : orders) {
+        for (Order order : orders) {
+            try {
                 log.info("Processing file {}", order.getFileName());
                 String processingFolder = "/processing/";
                 String stlFileName = order.getFileName().substring(0, order.getFileName().lastIndexOf(".")) + ".stl";
@@ -109,12 +109,12 @@ public class ProcessFilesService {
                     o.setPrice(calculatePrice(o));
                     orderRepository.save(o);
                 });
+            } catch (IOException e) {
+                throw new FileProcessingException("File processing failed");
+            } catch (InterruptedException e) {
+                log.error("Thread interrupted", e);
+                Thread.currentThread().interrupt();
             }
-        } catch (IOException e) {
-            throw new FileProcessingException("File processing failed");
-        } catch (InterruptedException e) {
-            log.error("Thread interrupted", e);
-            Thread.currentThread().interrupt();
         }
     }
 
