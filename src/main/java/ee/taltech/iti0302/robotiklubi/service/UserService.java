@@ -62,7 +62,7 @@ public class UserService {
         return signUpResponseDto;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public LoginResponseDto login(LoginRequestDto loginRequest) {
         LoginResponseDto loginResponse = LoginResponseDto.builder().build();
         Optional<User> user = userRepository.findByEmailIgnoreCase(loginRequest.getEmail());
@@ -81,7 +81,7 @@ public class UserService {
         return loginResponse;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public RefreshResponseDto refresh(RefreshRequestDto refreshRequest) {
         RefreshResponseDto refreshResponse = RefreshResponseDto.builder().build();
         refreshResponse.setAccessToken(TokenBuilder.createToken(

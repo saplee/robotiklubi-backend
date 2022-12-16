@@ -14,4 +14,13 @@ public class StatusResponseDto {
     private String fileName;
     private Double materialUsed;
 
+    public StatusResponseDto(String status, OrderDto orderDto) {
+        this.status = status;
+        this.layerCount = orderDto.getLayerCount();
+        this.layerHeight = orderDto.getLayerHeight();
+        this.printTime = orderDto.getPrintTime();
+        this.fileName = orderDto.getFileName();
+        this.materialUsed = orderDto.getMaterialUsed();
+    }
+
 }
