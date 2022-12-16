@@ -34,8 +34,13 @@
             <column name="tag" value="Salami"/>
         </insert>
         <insert tableName="wiki_tag_relations">
-            <column name= "id" value ="1"/>
+            <column name= "id" value ="900"/>
             <column name= "page_id" value ="87000"/>
+            <column name= "tag_id" value ="3"/>
+        </insert>
+        <insert tableName="wiki_tag_relations">
+            <column name= "id" value ="899"/>
+            <column name= "page_id" value ="12345"/>
             <column name= "tag_id" value ="3"/>
         </insert>
         <insert tableName="users">
