@@ -41,7 +41,9 @@ public class ProcessFilesService {
                                       String phone) {
         try {
             String fileName = file.getOriginalFilename();
-            if (fileName == null) return new OrderResponseDto(false);
+            if (fileName == null || !fileName.substring(fileName.lastIndexOf(".")).equals(".stl")) {
+                return new OrderResponseDto(false);
+            }
             fileName = fileName.replace(" ", "_");
             String gcodeFileName = fileName.substring(0, fileName.length() - 4) + ".gcode";
             Long id = clientRepository.save(Client.builder()
@@ -72,6 +74,7 @@ public class ProcessFilesService {
         orders = orders.stream().limit(MAX_AMOUNT_TO_PROCESS).toList();
         try {
             for (Order order : orders) {
+                log.info("Processing file {}", order.getFileName());
                 String processingFolder = "/processing/";
                 String stlFileName = order.getFileName().substring(0, order.getFileName().lastIndexOf(".")) + ".stl";
 

@@ -27,7 +27,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class WikiServiceTest {
+class WikiServiceTest {
 
     @Mock
     private WikiRepository wikiRepository;
