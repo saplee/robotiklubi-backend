@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
 
 import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiSearchCriteria;
-import ee.taltech.iti0302.robotiklubi.repository.WikiPage;
-import ee.taltech.iti0302.robotiklubi.repository.WikiRepository;
+
+
 import ee.taltech.iti0302.robotiklubi.test.integration.AbstractIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -52,7 +50,7 @@ class WikiControllerTest extends AbstractIntegrationTest {
 
     @Test
     void getPage() throws Exception {
-        mvc.perform(get("/wiki/87000")).andExpect(status().isOk()).andExpect(jsonPath("$.content").value("New content"));
+        mvc.perform(get("/wiki/87000")).andExpect(status().isOk()).andExpect(jsonPath("$.content").value("Some content"));
     }
 
     @Test
@@ -65,7 +63,7 @@ class WikiControllerTest extends AbstractIntegrationTest {
     @Test
     void getPageBySearch() throws Exception {
         WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().titleSearch("Some").build();
-        mvc.perform(post("/wiki/search").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria))).andExpect(status().isOk()).andExpect(jsonPath("$.results[0].id").value(12345));
+        mvc.perform(post("/wiki/search").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria))).andExpect(status().isOk()).andExpect(jsonPath("$.results[0].id").value(87000));
     }
     @Test
     void save() throws Exception {
@@ -78,7 +76,7 @@ class WikiControllerTest extends AbstractIntegrationTest {
     @Test
     void update() throws Exception {
         WikiPageDto wikiPage = WikiPageDto.builder().title("New title").content("New content").build();
-        mvc.perform(put("/wiki/update").param("id", "87000").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(wikiPage)))
+        mvc.perform(put("/wiki/update").param("id", "87001").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(wikiPage)))
                 .andExpect(status().isOk());
     }
     @Test

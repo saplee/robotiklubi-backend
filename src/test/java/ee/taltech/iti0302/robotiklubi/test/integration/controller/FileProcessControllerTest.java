@@ -82,7 +82,6 @@ class FileProcessControllerTest extends AbstractIntegrationTest {
                 .phone(phone)
                 .fileName(file.getOriginalFilename())
                 .build();
-        wait();
         mvc.perform(post("/process/status")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(statusRequestDto)))
