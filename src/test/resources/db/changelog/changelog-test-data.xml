@@ -34,8 +34,13 @@
             <column name="tag" value="Salami"/>
         </insert>
         <insert tableName="wiki_tag_relations">
-            <column name= "id" value ="1"/>
+            <column name= "id" value ="900"/>
             <column name= "page_id" value ="87000"/>
+            <column name= "tag_id" value ="3"/>
+        </insert>
+        <insert tableName="wiki_tag_relations">
+            <column name= "id" value ="899"/>
+            <column name= "page_id" value ="12345"/>
             <column name= "tag_id" value ="3"/>
         </insert>
         <insert tableName="users">
@@ -45,6 +50,29 @@
             <column name= "email" value ="k.k@mail.ee"/>
             <column name= "password" value ="$2a$13$LvhI77t5b61QGn3KnQIFweyAlayCi5hJ4h9D4I0lOJc./F38FYbkC"/>
             <column name= "role" value ="2"/>
+        </insert>
+        <insert tableName="wiki">
+            <column name="id" value="123"/>
+            <column name="title" value="New title"/>
+            <column name="content" value="New content"/>
+        </insert>
+        <insert tableName="wiki_tags">
+            <column name="id" value="55"/>
+            <column name="tag" value="K"/>
+        </insert>
+        <insert tableName="wiki_tags">
+            <column name="id" value="56"/>
+            <column name="tag" value="T"/>
+        </insert>
+        <insert tableName="wiki_tag_relations">
+            <column name= "id" value ="9000"/>
+            <column name= "page_id" value ="123"/>
+            <column name= "tag_id" value ="55"/>
+        </insert>
+        <insert tableName="wiki_tag_relations">
+            <column name= "id" value ="9001"/>
+            <column name= "page_id" value ="123"/>
+            <column name= "tag_id" value ="56"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

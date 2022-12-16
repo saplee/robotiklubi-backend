@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     @Test
     void allTags() throws Exception {
-        mvc.perform(get("/tags/all")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(3)));
+        mvc.perform(get("/tags/all")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(5)));
     }
     @Test
     void createNewTag() throws Exception {
