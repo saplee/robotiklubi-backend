@@ -1,10 +1,13 @@
 package ee.taltech.iti0302.robotiklubi.service;
 
 import ee.taltech.iti0302.robotiklubi.dto.user.*;
+import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
+import ee.taltech.iti0302.robotiklubi.exception.InternalServerException;
 import ee.taltech.iti0302.robotiklubi.exception.NotFoundException;
 import ee.taltech.iti0302.robotiklubi.mappers.user.UserMapper;
 import ee.taltech.iti0302.robotiklubi.repository.User;
 import ee.taltech.iti0302.robotiklubi.repository.UserRepository;
+import ee.taltech.iti0302.robotiklubi.repository.WikiPage;
 import ee.taltech.iti0302.robotiklubi.tokens.TokenBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -101,5 +104,17 @@ public class UserService {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) throw new NotFoundException("User not found.");
         return userMapper.toDetailedDto(user.get());
+    }
+
+    public void updateUser(Long id, SignUpUserDto signUpUserDto) {
+        try {
+            Optional<User> userOptional = userRepository.findById(id);
+            if (userOptional.isEmpty()) throw new NotFoundException("No");
+            User user = userOptional.get();
+            user.setPhone(signUpUserDto.getPhone());
+            user.setLastName(signUpUserDto.getLastName());
+            user.setFirstName(signUpUserDto.getFirstName());
+            userRepository.save(user);
+        } catch (Exception e) {throw new InternalServerException("Could not update wiki page (id " + id + ").", e);}
     }
 }
