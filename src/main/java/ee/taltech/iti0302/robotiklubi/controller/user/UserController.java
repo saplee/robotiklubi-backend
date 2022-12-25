@@ -5,10 +5,7 @@ import ee.taltech.iti0302.robotiklubi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -50,4 +47,10 @@ public class UserController {
     public RefreshResponseDto refresh(@RequestBody RefreshRequestDto request) {
         return userService.refresh(request);
     }
+
+    @PutMapping("/user/update")
+    public void updateUser(@RequestParam("id") Long id, @RequestBody UserDto userDto) {
+        userService.updateUser(id, userDto);
+    }
+
 }

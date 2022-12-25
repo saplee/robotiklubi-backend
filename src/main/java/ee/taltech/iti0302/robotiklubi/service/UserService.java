@@ -1,6 +1,7 @@
 package ee.taltech.iti0302.robotiklubi.service;
 
 import ee.taltech.iti0302.robotiklubi.dto.user.*;
+import ee.taltech.iti0302.robotiklubi.exception.InternalServerException;
 import ee.taltech.iti0302.robotiklubi.exception.NotFoundException;
 import ee.taltech.iti0302.robotiklubi.mappers.user.UserMapper;
 import ee.taltech.iti0302.robotiklubi.repository.User;
@@ -102,4 +103,18 @@ public class UserService {
         if (user.isEmpty()) throw new NotFoundException("User not found.");
         return userMapper.toDetailedDto(user.get());
     }
+
+    public void updateUser(Long id, UserDto userDto) {
+        try {
+            Optional<User> userOptional = userRepository.findById(id);
+            if (userOptional.isEmpty()) throw new NotFoundException("User not found.");
+            User user = userOptional.get();
+            user.setPhone(userDto.getPhone());
+            user.setLastName(userDto.getLastName());
+            user.setEmail(userDto.getEmail());
+            user.setFirstName(userDto.getFirstName());
+            userRepository.save(user);
+        } catch (Exception e) {throw new InternalServerException("Could not update user (id " + id + ").", e);}
+    }
+
 }
