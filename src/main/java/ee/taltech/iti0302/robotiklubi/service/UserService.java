@@ -106,14 +106,15 @@ public class UserService {
         return userMapper.toDetailedDto(user.get());
     }
 
-    public void updateUser(Long id, SignUpUserDto signUpUserDto) {
+    public void updateUser(Long id, UserDto userDto) {
         try {
             Optional<User> userOptional = userRepository.findById(id);
             if (userOptional.isEmpty()) throw new NotFoundException("No");
             User user = userOptional.get();
-            user.setPhone(signUpUserDto.getPhone());
-            user.setLastName(signUpUserDto.getLastName());
-            user.setFirstName(signUpUserDto.getFirstName());
+            user.setPhone(userDto.getPhone());
+            user.setLastName(userDto.getLastName());
+            user.setEmail(userDto.getEmail());
+            user.setFirstName(userDto.getFirstName());
             userRepository.save(user);
         } catch (Exception e) {throw new InternalServerException("Could not update wiki page (id " + id + ").", e);}
     }
