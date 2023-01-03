@@ -49,8 +49,8 @@ public class UserController {
     }
 
     @PutMapping("/user/update")
-    public void updateUser(@RequestParam("id") Long id, @RequestBody UserDto userDto) {
-        userService.updateUser(id, userDto);
+    public void updateUser(@RequestBody UserDto userDto) {
+        userService.updateUser(userDto);
     }
 
 }

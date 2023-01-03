@@ -104,9 +104,9 @@ public class UserService {
         return userMapper.toDetailedDto(user.get());
     }
 
-    public void updateUser(Long id, UserDto userDto) {
+    public void updateUser(UserDto userDto) {
         try {
-            Optional<User> userOptional = userRepository.findById(id);
+            Optional<User> userOptional = userRepository.findById(userDto.getId());
             if (userOptional.isEmpty()) throw new NotFoundException("User not found.");
             User user = userOptional.get();
             user.setPhone(userDto.getPhone());
@@ -114,7 +114,7 @@ public class UserService {
             user.setEmail(userDto.getEmail());
             user.setFirstName(userDto.getFirstName());
             userRepository.save(user);
-        } catch (Exception e) {throw new InternalServerException("Could not update user (id " + id + ").", e);}
+        } catch (Exception e) {throw new InternalServerException("Could not update user (id " + userDto.getId() + ").", e);}
     }
 
 }
