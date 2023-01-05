@@ -50,8 +50,8 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/user/update")
-    public void updateUser(@RequestBody UserDto userDto) {
-        userService.updateUser(userDto);
+    public void updateUser(Principal principal, @RequestBody UserDto userDto) {
+        userService.updateUser(principal.getName(), userDto);
     }
 
 }
