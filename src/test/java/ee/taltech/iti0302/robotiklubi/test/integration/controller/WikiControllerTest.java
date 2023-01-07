@@ -18,17 +18,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.testcontainers.shaded.org.awaitility.Awaitility.given;
 
 
 @AutoConfigureMockMvc
@@ -66,14 +65,8 @@ class WikiControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void getPageBySearch() throws Exception {
-        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().titleSearch("Some").build();
-        mvc.perform(post("/wiki/search").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria))).andExpect(status().isOk()).andExpect(jsonPath("$.results[0].id").value(87000));
-    }
-
-    @Test
     void save() throws Exception {
-        WikiPageDto wikiPage = WikiPageDto.builder().title("Some title 123.").content("Some content 123.").build();
+        WikiPageDto wikiPage = WikiPageDto.builder().title("#123.").content("#123.").build();
         mvc.perform(post("/wiki/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(wikiPage))).andExpect(status().isOk());
@@ -100,5 +93,179 @@ class WikiControllerTest extends AbstractIntegrationTest {
     void testDelete() throws Exception {
         mvc.perform(delete("/wiki/delete").param("id", "34000"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void searchPageByTitle() throws Exception {
+        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().titleSearch("Some").build();
+        mvc.perform(post("/wiki/search")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.results[0].id").value(87000));
+    }
+
+    @Test
+    void searchPagesByTitle() throws Exception {
+        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().titleSearch("Some").build();
+        MvcResult response = mvc.perform(post("/wiki/search")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria)))
+                .andExpect(status().isOk()).andReturn();
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = mapper.readValue(response.getResponse().getContentAsString(), Map.class);
+        List<WikiPageDto> results = (List<WikiPageDto>) map.get("results");
+        assertEquals(3, results.size());
+    }
+
+    @Test
+    void searchPagesByContent() throws Exception {
+        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().contentSearch("New").build();
+        MvcResult response = mvc.perform(post("/wiki/search")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria)))
+                .andExpect(status().isOk()).andReturn();
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = mapper.readValue(response.getResponse().getContentAsString(), Map.class);
+        List<WikiPageDto> results = (List<WikiPageDto>) map.get("results");
+        assertEquals(2, results.size());
+    }
+
+    @Test
+    void searchPagesByTag() throws Exception {
+        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().tags(List.of(3)).build();
+        MvcResult response = mvc.perform(post("/wiki/search")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.results[0].id").value(87000))
+                .andReturn();
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = mapper.readValue(response.getResponse().getContentAsString(), Map.class);
+        List<WikiPageDto> results = (List<WikiPageDto>) map.get("results");
+        assertEquals(2, results.size());
+    }
+
+    @Test
+    void searchPagesSortByTitleAscending() throws Exception {
+        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().titleSearch("title").sortByTitle(true).sortAscending(true).build();
+        mvc.perform(post("/wiki/search")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.results[0].title").value("New title                                         "))
+                .andExpect(jsonPath("$.results[-1].title").value("Some title                                        "));
+    }
+
+    @Test
+    void searchPagesSortByTitleDescending() throws Exception {
+        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().titleSearch("title").sortByTitle(true).sortAscending(false).build();
+        mvc.perform(post("/wiki/search")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.results[-1].title").value("New title                                         "))
+                .andExpect(jsonPath("$.results[0].title").value("Some title                                        "));
+    }
+
+    @Test
+    void searchPagesSortByCreationDateAscending() throws Exception {
+        // Create pages in defined order
+        WikiPageDto wikiPage1 = WikiPageDto.builder().title("Earlier #456").content("Wasd").build();
+        WikiPageDto wikiPage2 = WikiPageDto.builder().title("Later #456").content("Wasd").build();
+        mvc.perform(post("/wiki/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(wikiPage1))).andExpect(status().isOk());
+        mvc.perform(post("/wiki/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(wikiPage2))).andExpect(status().isOk());
+        // Sort by order
+        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().titleSearch("#456")
+                .sortByCreationDate(true).sortAscending(true).build();
+        mvc.perform(post("/wiki/search")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.results[0].title").value("Earlier #456                                      "))
+                .andExpect(jsonPath("$.results[-1].title").value("Later #456                                        "));
+    }
+
+    @Test
+    void searchPagesSortByCreationDateDescending() throws Exception {
+        // Create pages in defined order
+        WikiPageDto wikiPage1 = WikiPageDto.builder().title("Earlier #456").content("Wasd").build();
+        WikiPageDto wikiPage2 = WikiPageDto.builder().title("Later #456").content("Wasd").build();
+        mvc.perform(post("/wiki/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(wikiPage1))).andExpect(status().isOk());
+        mvc.perform(post("/wiki/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(wikiPage2))).andExpect(status().isOk());
+        // Sort by order
+        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().titleSearch("#456")
+                .sortByCreationDate(true).sortAscending(false).build();
+        mvc.perform(post("/wiki/search")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.results[-1].title").value("Earlier #456                                      "))
+                .andExpect(jsonPath("$.results[0].title").value("Later #456                                        "));
+    }
+
+    @Test
+    void searchPagesSortByEditDateAscending() throws Exception {
+        // Create pages in defined order and get IDs
+        WikiPageDto wikiPage1 = WikiPageDto.builder().title("Earlier #456").content("Wasd").build();
+        WikiPageDto wikiPage2 = WikiPageDto.builder().title("Later #456").content("Wasd").build();
+        MvcResult response1 = mvc.perform(post("/wiki/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(wikiPage1))).andExpect(status().isOk())
+                .andReturn();
+        MvcResult response2 = mvc.perform(post("/wiki/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(wikiPage2))).andExpect(status().isOk())
+                .andReturn();
+        String id1 = response1.getResponse().getContentAsString();
+        String id2 = response2.getResponse().getContentAsString();
+        // Update pages
+        WikiPageDto wikiPage3 = WikiPageDto.builder().title("First edited #654").content("Asd").build();
+        mvc.perform(put("/wiki/update").param("id", id2)
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(wikiPage3)));
+        WikiPageDto wikiPage4 = WikiPageDto.builder().title("Second edited #654").content("Asd").build();
+        mvc.perform(put("/wiki/update").param("id", id1)
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(wikiPage4)));
+        // Sort by order
+        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().titleSearch("#654")
+                .sortByEditDate(true).sortAscending(true).build();
+        mvc.perform(post("/wiki/search")
+                        .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.results[0].title").value("First edited #654                                 "))
+                .andExpect(jsonPath("$.results[-1].title").value("Second edited #654                                "));
+    }
+
+    @Test
+    void searchPagesSortByEditDateDescending() throws Exception {
+        // Create pages in defined order and get IDs
+        WikiPageDto wikiPage1 = WikiPageDto.builder().title("Earlier #456").content("Wasd").build();
+        WikiPageDto wikiPage2 = WikiPageDto.builder().title("Later #456").content("Wasd").build();
+        MvcResult response1 = mvc.perform(post("/wiki/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(wikiPage1))).andExpect(status().isOk())
+                .andReturn();
+        MvcResult response2 = mvc.perform(post("/wiki/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(wikiPage2))).andExpect(status().isOk())
+                .andReturn();
+        String id1 = response1.getResponse().getContentAsString();
+        String id2 = response2.getResponse().getContentAsString();
+        // Update pages
+        WikiPageDto wikiPage3 = WikiPageDto.builder().title("First edited #654").content("Asd").build();
+        mvc.perform(put("/wiki/update").param("id", id2)
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(wikiPage3)));
+        WikiPageDto wikiPage4 = WikiPageDto.builder().title("Second edited #654").content("Asd").build();
+        mvc.perform(put("/wiki/update").param("id", id1)
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(wikiPage4)));
+        // Sort by order
+        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().titleSearch("#654")
+                .sortByEditDate(true).sortAscending(false).build();
+        mvc.perform(post("/wiki/search")
+                        .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.results[-1].title").value("First edited #654                                 "))
+                .andExpect(jsonPath("$.results[0].title").value("Second edited #654                                "));
     }
 }
