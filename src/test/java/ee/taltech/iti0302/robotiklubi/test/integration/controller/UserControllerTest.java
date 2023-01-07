@@ -6,6 +6,7 @@ import ee.taltech.iti0302.robotiklubi.dto.user.LoginRequestDto;
 import ee.taltech.iti0302.robotiklubi.dto.user.RefreshRequestDto;
 import ee.taltech.iti0302.robotiklubi.dto.user.SignUpUserDto;
 
+import ee.taltech.iti0302.robotiklubi.dto.user.UserDto;
 import ee.taltech.iti0302.robotiklubi.test.integration.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,7 @@ import java.util.Map;
 
 import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -152,5 +152,13 @@ class UserControllerTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.lastName").value("K"))
                 .andExpect(jsonPath("$.email").value("k.k@mail.ee                                       "))
                 .andExpect(jsonPath("$.role").value(2));
+    }
+    @Test
+    void testUserUpdate() throws Exception {
+        SecurityContext context = SecurityContextHolder.getContext();
+        UserDto userDto = UserDto.builder().email("ef@mail.ee").lastName("New").firstName("Name").phone("1234").build();
+        context.setAuthentication(new UsernamePasswordAuthenticationToken(8000, null, List.of(new SimpleGrantedAuthority("MEMBER"), new SimpleGrantedAuthority("USER"))));
+        mvc.perform(put("/user/update").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userDto)))
+                .andExpect(status().isOk());
     }
 }
