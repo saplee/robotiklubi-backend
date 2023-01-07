@@ -27,7 +27,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class WikiServiceTest {
+public class WikiServiceTest {
 
     @Mock
     private WikiRepository wikiRepository;
@@ -37,9 +37,6 @@ class WikiServiceTest {
     private WikiPageMapper wikiPageMapper = new WikiPageMapperImpl();
     @Spy
     private WikiTagMapper wikiTagMapper = new WikiTagMapperImpl();
-    @Spy
-    private WikiPageMetaDataMapper wikiPageMetaDataMapper = new WikiPageMetaDataMapperImpl();
-
 
     @InjectMocks
     private WikiService wikiService;
@@ -95,5 +92,18 @@ class WikiServiceTest {
         then(wikiTagMapper).should().toDtoList(new ArrayList<>(List.of(wikitag)));
         then(wikiTagRelationRepository).should().findAllByPageId(id2);
         assertEquals(result.get(0), actual.get(0));
+    }
+
+    @Test
+    void create() {
+        long id = 420L;
+        String title = "This is the title";
+        String content = "This is some very interesting content.";
+        // given
+
+        WikiPageDto wikiPageDto = WikiPageDto.builder().id(id).title(title).content(content).build();
+        Long result = wikiService.createPage(wikiPageDto);        // when
+        // then
+        assertEquals(null, result);
     }
 }
