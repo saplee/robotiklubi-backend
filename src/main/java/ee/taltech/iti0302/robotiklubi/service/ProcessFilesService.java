@@ -19,6 +19,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,12 @@ public class ProcessFilesService {
     private final OrderMapper orderMapper;
 
 
+    public String createGcodeFilename(String stlFilename) {
+        stlFilename = stlFilename.replace(" ", "_");
+        return stlFilename.substring(0, stlFilename.length() - 4) + ".gcode";
+    }
+
+
     @Transactional
     public OrderResponseDto queueFile(MultipartFile file, String firstName, String lastName, String email,
                                       String phone) {
@@ -44,16 +51,16 @@ public class ProcessFilesService {
             if (fileName == null || !fileName.substring(fileName.lastIndexOf(".")).equals(".stl")) {
                 return new OrderResponseDto(false);
             }
-            fileName = fileName.replace(" ", "_");
-            String gcodeFileName = fileName.substring(0, fileName.length() - 4) + ".gcode";
-            Long id = clientRepository.save(Client.builder()
+            String gcodeFileName = createGcodeFilename(fileName);
+            Client client = Client.builder()
                     .firstName(firstName)
                     .lastName(lastName)
                     .email(email)
                     .phoneNumber(phone)
-                    .build()).getId();
+                    .build();
+            clientRepository.save(client);
             Order order = Order.builder()
-                    .clientId(id)
+                    .client(client)
                     .fileName(gcodeFileName)
                     .fileStl(file.getBytes())
                     .sliced(false)
@@ -70,7 +77,7 @@ public class ProcessFilesService {
     @Transactional
     public void processFiles() {
         List<Order> orders = orderRepository.findAllBySliced(false);
-        orders.sort((o1, o2) -> o1.getId().compareTo(o2.getId()));
+        orders.sort(Comparator.comparing(Order::getId));
         orders = orders.stream().limit(MAX_AMOUNT_TO_PROCESS).toList();
         for (Order order : orders) {
             try {
@@ -86,10 +93,10 @@ public class ProcessFilesService {
                 String gcodeFileName = order.getFileName();
                 Process pr =
                         new ProcessBuilder("curaengine", "slice", "-j", "/opt/PrinterConfigs/RobotiklubiConf.def.json",
-                                "-l",
-                                processingFolder + stlFileName, "-o", processingFolder + gcodeFileName).start();
+                                "-l", processingFolder + stlFileName,
+                                "-o", processingFolder + gcodeFileName).start();
                 pr.waitFor();
-                Map<GcodeValues, Float> data = getGcodeData(pr);
+                Map<GcodeValues, Float> data = getGcodeData(pr.getInputStream());
                 File gcodeFile = new File(basePath.toAbsolutePath() + processingFolder + gcodeFileName);
                 if (!Files.deleteIfExists(localStlFile.toPath())) {
                     throw new FileProcessingException(
@@ -102,10 +109,10 @@ public class ProcessFilesService {
                     } catch (IOException e) {
                         throw new FileProcessingException("Error while reading gcode file");
                     }
-                    o.setLayerCount(data.get(GcodeValues.LAYER_COUNT).intValue());
-                    o.setLayerHeight(data.get(GcodeValues.LAYER_HEIGHT));
-                    o.setMaterialUsed(data.get(GcodeValues.MATERIAL_USED));
-                    o.setPrintTime(data.get(GcodeValues.PRINT_TIME).intValue());
+                    o.setLayerCount(data.getOrDefault(GcodeValues.LAYER_COUNT, 0f).intValue());
+                    o.setLayerHeight(data.getOrDefault(GcodeValues.LAYER_HEIGHT, 0f));
+                    o.setMaterialUsed(data.getOrDefault(GcodeValues.MATERIAL_USED, 0f));
+                    o.setPrintTime(data.getOrDefault(GcodeValues.PRINT_TIME, 0f).intValue());
                     o.setPrice(calculatePrice(o));
                     orderRepository.save(o);
                 });
@@ -118,7 +125,7 @@ public class ProcessFilesService {
         }
     }
 
-    private void writeDataToFile(File file, byte[] data) {
+    public void writeDataToFile(File file, byte[] data) {
         try (OutputStream os = new FileOutputStream(file)) {
             os.write(data);
         } catch (IOException e) {
@@ -130,15 +137,12 @@ public class ProcessFilesService {
         return 3 + order.getMaterialUsed() * PLA_DENSITY * 0.1f + (int) (order.getPrintTime() / 3600D) * 1.5f;
     }
 
-    @Transactional()
+    @Transactional(readOnly = true)
     public StatusResponseDto processStatus(StatusRequestDto requestDto) {
         List<Client> clients = clientRepository.findAllByFirstNameAndLastNameAndEmailAndPhoneNumber(
                 requestDto.getFirstName(), requestDto.getLastName(), requestDto.getEmail(), requestDto.getPhone());
-        log.info("{}", clients);
         for (Client client : clients) {
-            log.info("Client: {}", client);
-            List<Order> orders = orderRepository.findAllByClientId(client.getId());
-            log.info("{}", orders);
+            List<Order> orders = orderRepository.findAllByClient(client);
             for (Order order : orders) {
                 if (order.getFileName()
                         .strip()
@@ -152,8 +156,8 @@ public class ProcessFilesService {
         return new StatusResponseDto("pending");
     }
 
-    private Map<GcodeValues, Float> getGcodeData(Process pr) throws IOException {
-        BufferedReader bfr = new BufferedReader(new java.io.InputStreamReader(pr.getInputStream()));
+    public Map<GcodeValues, Float> getGcodeData(InputStream inputStream) throws IOException {
+        BufferedReader bfr = new BufferedReader(new java.io.InputStreamReader(inputStream));
         String line;
         Map<GcodeValues, Float> data = new EnumMap<>(GcodeValues.class);
         while ((line = bfr.readLine()) != null) {
@@ -170,7 +174,7 @@ public class ProcessFilesService {
         return data;
     }
 
-    enum GcodeValues {
+    public enum GcodeValues {
         MATERIAL_USED,
         PRINT_TIME,
         LAYER_COUNT,

@@ -1,0 +1,154 @@
+Cura_SteamEngine version 5.3.0-alpha
+Copyright (C) 2022 Ultimaker
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+[2023-01-04 10:47:43.989] [warning] Unrecognized data type in JSON setting machine_disallowed_areas
+[2023-01-04 10:47:43.989] [warning] Unrecognized data type in JSON setting nozzle_disallowed_areas
+[2023-01-04 10:47:43.989] [warning] Unrecognized data type in JSON setting machine_head_with_fans_polygon
+[2023-01-04 10:47:43.989] [warning] JSON setting roofing_monotonic has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_max_feedrate_x has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_max_feedrate_y has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_max_feedrate_z has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_max_feedrate_e has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_max_acceleration_x has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_max_acceleration_y has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_max_acceleration_z has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_max_acceleration_e has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_acceleration has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_max_jerk_xy has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_max_jerk_z has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting machine_max_jerk_e has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting acceleration_print has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting acceleration_travel has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting acceleration_travel_layer_0 has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting acceleration_roofing has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting jerk_print has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting jerk_travel has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting jerk_travel_layer_0 has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting acceleration_enabled has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting jerk_enabled has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting speed_print has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting speed_wall_x has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting speed_roofing has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting speed_travel has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting speed_layer_0 has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting speed_travel_layer_0 has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting speed_prime_tower has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting speed_support has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting speed_support_interface has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting speed_z_hop has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting optimize_wall_printing_order has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting material_initial_print_temperature has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting material_final_print_temperature has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting z_seam_type has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting z_seam_corner has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting infill_pattern has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting infill_before_walls has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting infill_overlap has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting skin_overlap has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting infill_wipe_dist has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting wall_0_wipe_dist has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting fill_outline_gaps has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting retraction_speed has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting retraction_retract_speed has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting retraction_prime_speed has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting retraction_hop has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting retraction_combing has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting retraction_combing_max_distance has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting travel_avoid_other_parts has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting travel_avoid_supports has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting travel_retract_before_outer_wall has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting retraction_count_max has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting retraction_extrusion_window has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting retraction_min_travel has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting cool_fan_full_at_height has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting cool_min_layer_time has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting adhesion_type has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting brim_replaces_support has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting skirt_gap has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting skirt_line_count has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting adaptive_layer_height_variation has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting adaptive_layer_height_variation_step has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting meshfix_maximum_resolution has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting meshfix_maximum_travel_resolution has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_angle has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_pattern has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_infill_rate has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_use_towers has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_xy_distance has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_xy_distance_overhang has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_z_distance has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_top_distance has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_xy_overrides_z has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_wall_count has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_brim_enable has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_brim_width has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_interface_enable has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_interface_height has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_interface_density has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_interface_pattern has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting support_interface_skip_height has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting minimum_support_area has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting minimum_interface_area has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting top_bottom_thickness has no default_value!
+[2023-01-04 10:47:43.990] [warning] JSON setting wall_thickness has no default_value!
+[2023-01-04 10:47:43.990] [warning] Unrecognized data type in JSON setting machine_disallowed_areas
+[2023-01-04 10:47:43.990] [warning] Unrecognized data type in JSON setting machine_head_with_fans_polygon
+[2023-01-04 10:47:43.990] [warning] JSON setting gantry_height has no default_value!
+[2023-01-04 10:47:44.137] [warning] Mesh has overlapping faces!
+[2023-01-04 10:47:44.185] [info] loading '/processing/test.stl' took 0.19335007667541504 seconds
+[2023-01-04 10:47:44.193] [info] Loaded from disk in 0.20595598220825195s
+
+[2023-01-04 10:47:44.195] [info] Progress: start accomplished in 2.5987625122070312e-05s
+[2023-01-04 10:47:44.195] [info] Starting slice...
+[2023-01-04 10:47:44.195] [info] Slicing model...
+[2023-01-04 10:47:44.248] [info] Slice of mesh took 0.053147077560424805 seconds
+[2023-01-04 10:47:44.403] [info] Make polygons took 0.15559887886047363 seconds
+[2023-01-04 10:47:44.415] [info] Progress: slice accomplished in 0.2207798957824707s
+[2023-01-04 10:47:44.415] [info] Starting layerparts...
+[2023-01-04 10:47:44.497] [info] Progress: layerparts accomplished in 0.08140015602111816s
+[2023-01-04 10:47:44.497] [info] Starting inset+skin...
+[2023-01-04 10:47:46.715] [info] Layer count: 257
+[2023-01-04 10:47:46.715] [info] Progress: inset+skin accomplished in 2.2178549766540527s
+[2023-01-04 10:47:46.715] [info] Starting support...
+[2023-01-04 10:47:52.227] [info] Progress: support accomplished in 5.51258111000061s
+[2023-01-04 10:47:52.227] [info] Starting export...
+[2023-01-04 10:47:52.809] [warning] Failing to discretize parabola! Must add an apex or one of the endpoints.
+[2023-01-04 10:47:53.862] [warning] Failing to discretize parabola! Must add an apex or one of the endpoints.
+[2023-01-04 10:47:53.917] [warning] Failing to discretize parabola! Must add an apex or one of the endpoints.
+[2023-01-04 10:47:53.920] [warning] Failing to discretize parabola! Must add an apex or one of the endpoints.
+[2023-01-04 10:47:54.142] [warning] Failing to discretize parabola! Must add an apex or one of the endpoints.
+[2023-01-04 10:47:54.562] [warning] Failing to discretize parabola! Must add an apex or one of the endpoints.
+[2023-01-04 10:47:54.863] [warning] Failing to discretize parabola! Must add an apex or one of the endpoints.
+[2023-01-04 10:47:55.150] [warning] Failing to discretize parabola! Must add an apex or one of the endpoints.
+[2023-01-04 10:47:56.350] [warning] Failing to discretize parabola! Must add an apex or one of the endpoints.
+[2023-01-04 10:47:56.371] [warning] Failing to discretize parabola! Must add an apex or one of the endpoints.
+[2023-01-04 10:47:56.400] [warning] Failing to discretize parabola! Must add an apex or one of the endpoints.
+[2023-01-04 10:47:58.466] [info] Progress: export accomplished in 6.238783836364746s
+[2023-01-04 10:47:58.469] [info] Total time elapsed 14.274459838867188s.
+
+[2023-01-04 10:47:58.469] [info] Gcode header after slicing: ;FLAVOR:Marlin
+;TIME:11152
+;Filament used: 6.92991m
+;Layer height: 0.12
+;MINX:80.291
+;MINY:83.759
+;MINZ:0.3
+;MAXX:150.054
+;MAXY:142.245
+;MAXZ:31.02
+
+[2023-01-04 10:47:58.469] [info] Print time (s): 11152
+[2023-01-04 10:47:58.469] [info] Print time (hr|min|s): 3h 5m 52s
+[2023-01-04 10:47:58.469] [info] Filament (mm^3): 16668

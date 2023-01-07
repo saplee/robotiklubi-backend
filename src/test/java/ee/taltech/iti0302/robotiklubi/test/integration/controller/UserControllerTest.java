@@ -2,7 +2,6 @@ package ee.taltech.iti0302.robotiklubi.test.integration.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.taltech.iti0302.robotiklubi.dto.user.LoginRequestDto;
-
 import ee.taltech.iti0302.robotiklubi.dto.user.RefreshRequestDto;
 import ee.taltech.iti0302.robotiklubi.dto.user.SignUpUserDto;
 
