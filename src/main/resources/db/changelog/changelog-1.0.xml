@@ -169,5 +169,7 @@
             <column name="price" type="float"/>
         </createTable>
     </changeSet>
-
+    <changeSet id="03.01.2023 miloom 1" author="miloom">
+        <renameColumn tableName="orders" oldColumnName="client_id" newColumnName="client"/>
+    </changeSet>
 </databaseChangeLog>
