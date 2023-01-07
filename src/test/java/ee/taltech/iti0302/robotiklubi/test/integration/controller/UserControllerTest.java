@@ -43,7 +43,7 @@ class UserControllerTest extends AbstractIntegrationTest {
 
     @Test
     void regularMembers() throws Exception {
-        mvc.perform(get("/users/members")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1)));
+        mvc.perform(get("/users/members")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(2)));
     }
 
     @Test
@@ -157,7 +157,7 @@ class UserControllerTest extends AbstractIntegrationTest {
     void testUserUpdate() throws Exception {
         SecurityContext context = SecurityContextHolder.getContext();
         UserDto userDto = UserDto.builder().email("ef@mail.ee").lastName("New").firstName("Name").phone("1234").build();
-        context.setAuthentication(new UsernamePasswordAuthenticationToken(8000, null, List.of(new SimpleGrantedAuthority("MEMBER"), new SimpleGrantedAuthority("USER"))));
+        context.setAuthentication(new UsernamePasswordAuthenticationToken(80000, null, List.of(new SimpleGrantedAuthority("MEMBER"), new SimpleGrantedAuthority("USER"))));
         mvc.perform(put("/user/update").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk());
     }

@@ -140,7 +140,7 @@ class WikiControllerTest extends AbstractIntegrationTest {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(response.getResponse().getContentAsString(), Map.class);
         List<WikiPageDto> results = (List<WikiPageDto>) map.get("results");
-        assertEquals(2, results.size());
+        assertEquals(1, results.size());
     }
 
     @Test

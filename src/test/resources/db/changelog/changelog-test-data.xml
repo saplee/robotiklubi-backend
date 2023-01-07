@@ -56,6 +56,14 @@
             <column name= "password" value ="$2a$13$LvhI77t5b61QGn3KnQIFweyAlayCi5hJ4h9D4I0lOJc./F38FYbkC"/>
             <column name= "role" value ="2"/>
         </insert>
+        <insert tableName="users">
+            <column name= "id" value ="80000"/>
+            <column name= "firstname" value ="K"/>
+            <column name= "lastname" value ="K"/>
+            <column name= "email" value ="k.kfdsf@mail.ee"/>
+            <column name= "password" value ="$2a$13$LvhI77t5b61QGn3KnQIFweyAlayCi5hJ4h9D4I0lOJc./F38FYbkC"/>
+            <column name= "role" value ="2"/>
+        </insert>
         <insert tableName="wiki">
             <column name="id" value="123"/>
             <column name="title" value="New title"/>
