@@ -79,7 +79,7 @@ class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void loginFails() throws Exception {
+    void testLoginFails() throws Exception {
         LoginRequestDto loginRequestDto = new LoginRequestDto();
         loginRequestDto.setEmail("k.k@mail.ee");
         loginRequestDto.setPassword("13321");
