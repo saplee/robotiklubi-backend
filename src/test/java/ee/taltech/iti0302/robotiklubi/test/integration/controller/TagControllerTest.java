@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
- class TagControllerTest extends AbstractIntegrationTest {
+class TagControllerTest extends AbstractIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -44,6 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     void allTags() throws Exception {
         mvc.perform(get("/tags/all")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(5)));
     }
+
     @Test
     void createNewTag() throws Exception {
         TagDto tagDto = TagDto.builder().tag("Gaming").build();
@@ -51,9 +52,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     }
 
     @Test
+    void createDuplicateTag() throws Exception {
+        TagDto tagDto = TagDto.builder().tag("Game").build();
+        mvc.perform(post("/tags/create")
+                .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(tagDto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void deleteTag() throws Exception {
         mvc.perform(delete("/tags/delete").param("id", "900")).andExpect(status().isOk());
     }
+
     @Test
     void testUpdateTag() throws Exception {
         TagDto tagDto = TagDto.builder().tag("Pizza").build();

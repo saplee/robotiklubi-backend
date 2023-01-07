@@ -53,6 +53,12 @@ class WikiControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
+    void getPageDoesNotExist() throws Exception {
+        mvc.perform(get("/wiki/99"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void getPageTags() throws Exception {
         mvc.perform(get("/wiki/tags/87000"))
                 .andExpect(status().isOk())
@@ -64,6 +70,7 @@ class WikiControllerTest extends AbstractIntegrationTest {
         WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().titleSearch("Some").build();
         mvc.perform(post("/wiki/search").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria))).andExpect(status().isOk()).andExpect(jsonPath("$.results[0].id").value(87000));
     }
+
     @Test
     void save() throws Exception {
         WikiPageDto wikiPage = WikiPageDto.builder().title("Some title 123.").content("Some content 123.").build();
@@ -72,12 +79,23 @@ class WikiControllerTest extends AbstractIntegrationTest {
                 .content(objectMapper.writeValueAsString(wikiPage))).andExpect(status().isOk());
 
     }
+
+    @Test
+    void createWikiPageFaultyData() throws Exception {
+        WikiPageDto wikiPage = WikiPageDto.builder().title(null).content(null).build();
+        mvc.perform(post("/wiki/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(wikiPage)))
+                .andExpect(status().isInternalServerError());
+    }
+
     @Test
     void update() throws Exception {
         WikiPageDto wikiPage = WikiPageDto.builder().title("New title").content("New content").build();
         mvc.perform(put("/wiki/update").param("id", "87001").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(wikiPage)))
                 .andExpect(status().isOk());
     }
+
     @Test
     void testDelete() throws Exception {
         mvc.perform(delete("/wiki/delete").param("id", "34000"))
