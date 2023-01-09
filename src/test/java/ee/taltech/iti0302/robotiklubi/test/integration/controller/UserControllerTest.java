@@ -59,7 +59,7 @@ class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void signUpInvalidUserData() throws Exception {
+    void signUpInvalidUserDataTest() throws Exception {
         SignUpUserDto user = SignUpUserDto.builder().lastName(null).firstName(null).password("123").email("j.k@mail.ee").build();
         mvc.perform(post("/user/signup")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -68,7 +68,7 @@ class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void signUpSameEmail() throws Exception {
+    void signUpSameEmailTest() throws Exception {
         SignUpUserDto user = SignUpUserDto.builder().lastName("K").firstName("KK").password("123").email("k.k@mail.ee").build();
         mvc.perform(post("/user/signup")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,7 +88,7 @@ class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void login() throws Exception {
+    void loginTest() throws Exception {
         LoginRequestDto loginRequestDto = new LoginRequestDto();
         loginRequestDto.setEmail("k.k@mail.ee");
         loginRequestDto.setPassword("abc");
@@ -99,7 +99,7 @@ class UserControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void login2() throws Exception {
+    void loginAccessTokenTest() throws Exception {
         LoginRequestDto loginRequestDto = new LoginRequestDto();
         loginRequestDto.setEmail("k.k@mail.ee");
         loginRequestDto.setPassword("abc");

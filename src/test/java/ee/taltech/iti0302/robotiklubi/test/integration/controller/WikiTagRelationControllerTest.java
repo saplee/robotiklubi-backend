@@ -47,7 +47,7 @@ class WikiTagRelationControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void tagRelationMAny() throws Exception {
+    void tagRelationMany() throws Exception {
         TagListDto tagListDto = new TagListDto();
         TagDto tagDto = TagDto.builder().tag("Tank").id(123L).build();
         TagDto tagDto2 = TagDto.builder().tag("Plane").id(1234L).build();
