@@ -27,16 +27,16 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class WikiServiceTest {
+class WikiServiceTest {
 
     @Mock
     private WikiRepository wikiRepository;
     @Mock
     private WikiTagRelationRepository wikiTagRelationRepository;
     @Spy
-    private WikiPageMapper wikiPageMapper = new WikiPageMapperImpl();
+    private final WikiPageMapper wikiPageMapper = new WikiPageMapperImpl();
     @Spy
-    private WikiTagMapper wikiTagMapper = new WikiTagMapperImpl();
+    private final WikiTagMapper wikiTagMapper = new WikiTagMapperImpl();
 
     @InjectMocks
     private WikiService wikiService;
@@ -59,9 +59,6 @@ public class WikiServiceTest {
 
     @Test
     void getPagesByIdWrong() {
-        long id = 222L;
-        String title = "This is the title";
-        String content = "This is some very interesting content.";
         // given
         Exception e = new Exception();
         given(wikiRepository.findById(233L)).willThrow(new InternalServerException("Could not retrieve wiki page (id " + 233 + ").", e));
@@ -104,6 +101,6 @@ public class WikiServiceTest {
         WikiPageDto wikiPageDto = WikiPageDto.builder().id(id).title(title).content(content).build();
         Long result = wikiService.createPage(wikiPageDto);        // when
         // then
-        assertEquals(null, result);
+        assertNull(result);
     }
 }

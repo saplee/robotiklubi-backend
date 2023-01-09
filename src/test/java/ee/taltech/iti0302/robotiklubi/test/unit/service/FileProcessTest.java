@@ -42,6 +42,7 @@ class FileProcessTest {
     @InjectMocks
     private ProcessFilesService processFilesService;
 
+    // This is needed for the processStatus method
     @Spy
     private OrderMapper orderMapper = new OrderMapperImpl();
 
