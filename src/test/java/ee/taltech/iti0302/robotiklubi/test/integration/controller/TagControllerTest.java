@@ -42,7 +42,7 @@ class TagControllerTest extends AbstractIntegrationTest {
 
     @Test
     void allTags() throws Exception {
-        mvc.perform(get("/tags/all")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(5)));
+        mvc.perform(get("/tags/all")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(6)));
     }
 
     @Test

@@ -131,12 +131,11 @@ class WikiControllerTest extends AbstractIntegrationTest {
 
     @Test
     void searchPagesByTag() throws Exception {
-        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().tags(List.of(3)).build();
+        WikiSearchCriteria searchCriteria = WikiSearchCriteria.builder().tags(List.of(77)).build();
         MvcResult response = mvc.perform(post("/wiki/search")
                 .contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(searchCriteria)))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.results[0].id").value(87000))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.results[0].id").value(12345))
                 .andReturn();
-
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(response.getResponse().getContentAsString(), Map.class);
         List<WikiPageDto> results = (List<WikiPageDto>) map.get("results");
