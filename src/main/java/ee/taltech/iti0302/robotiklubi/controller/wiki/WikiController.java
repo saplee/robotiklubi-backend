@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,8 +20,8 @@ public class WikiController {
 
     @PreAuthorize("hasAuthority('MEMBER')")
     @PostMapping("/wiki/create")
-    public Long createWikiPage(@RequestBody WikiPageDto wikiPageDto) {
-        return wikiService.createPage(wikiPageDto);
+    public Long createWikiPage(@RequestBody WikiPageDto wikiPageDto, Principal principal) {
+        return wikiService.createPage(wikiPageDto, principal.getName());
     }
 
     @GetMapping("/wiki/{id}")
@@ -30,8 +31,8 @@ public class WikiController {
 
     @PreAuthorize("hasAuthority('MEMBER')")
     @PutMapping("/wiki/update")
-    public void updateWikiPage(@RequestParam("id") Long id, @RequestBody WikiPageDto wikiPageDto) {
-        wikiService.updatePage(id, wikiPageDto);
+    public void updateWikiPage(@RequestParam("id") Long id, @RequestBody WikiPageDto wikiPageDto, Principal principal) {
+        wikiService.updatePage(id, wikiPageDto, principal.getName());
     }
 
     @PreAuthorize("hasAuthority('MEMBER')")

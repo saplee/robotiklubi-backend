@@ -43,7 +43,7 @@ class WikiControllerTest extends AbstractIntegrationTest {
     @BeforeEach
     void setSecurityContext() {
         SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(new UsernamePasswordAuthenticationToken(1, null, List.of(new SimpleGrantedAuthority("MEMBER"))));
+        context.setAuthentication(new UsernamePasswordAuthenticationToken(8000, null, List.of(new SimpleGrantedAuthority("MEMBER"))));
     }
 
     @Test

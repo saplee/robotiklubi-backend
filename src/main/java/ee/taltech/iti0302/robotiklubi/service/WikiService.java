@@ -34,11 +34,17 @@ public class WikiService {
 
     private final WikiCriteriaRepository wikiCriteriaRepository;
 
-    public Long createPage(WikiPageDto wikiPageDto) {
+    private final UserRepository userRepository;
+
+    public Long createPage(WikiPageDto wikiPageDto, String idString) {
         try {
+            Optional<User> author = userRepository.findById(Long.valueOf(idString));
+            if (author.isEmpty()) throw new NotFoundException("Invalid author ID.");
             WikiPage page = WikiPage.builder()
                     .title(wikiPageDto.getTitle())
                     .content(wikiPageDto.getContent())
+                    .author(author.get())
+                    .lastEditedBy(author.get())
                     .build();
             wikiRepository.save(page);
             return page.getId();
@@ -53,13 +59,16 @@ public class WikiService {
         } catch (Exception e) {throw new InternalServerException("Could not retrieve wiki page (id " + id + ").", e);}
     }
 
-    public void updatePage(Long id, WikiPageDto wikiPageDto) {
+    public void updatePage(Long id, WikiPageDto wikiPageDto, String idString) {
         try {
+            Optional<User> editor = userRepository.findById(Long.valueOf(idString));
+            if (editor.isEmpty()) throw new NotFoundException("Invalid editor ID.");
             Optional<WikiPage> pageOptional = wikiRepository.findById(id);
             if (pageOptional.isEmpty()) throw new NotFoundException(PAGE_NOT_FOUND);
             WikiPage page = pageOptional.get();
             page.setTitle(wikiPageDto.getTitle());
             page.setContent(wikiPageDto.getContent());
+            page.setLastEditedBy(editor.get());
         } catch (Exception e) {throw new InternalServerException("Could not update wiki page (id " + id + ").", e);}
     }
 
