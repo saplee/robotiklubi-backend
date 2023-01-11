@@ -1,4 +1,4 @@
-package ee.taltech.iti0302.robotiklubi.test.unit;
+package ee.taltech.iti0302.robotiklubi.test.unit.service;
 
 import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
 
@@ -34,12 +34,9 @@ class WikiServiceTest {
     @Mock
     private WikiTagRelationRepository wikiTagRelationRepository;
     @Spy
-    private WikiPageMapper wikiPageMapper = new WikiPageMapperImpl();
+    private final WikiPageMapper wikiPageMapper = new WikiPageMapperImpl();
     @Spy
-    private WikiTagMapper wikiTagMapper = new WikiTagMapperImpl();
-    @Spy
-    private WikiPageMetaDataMapper wikiPageMetaDataMapper = new WikiPageMetaDataMapperImpl();
-
+    private final WikiTagMapper wikiTagMapper = new WikiTagMapperImpl();
 
     @InjectMocks
     private WikiService wikiService;
@@ -62,9 +59,6 @@ class WikiServiceTest {
 
     @Test
     void getPagesByIdWrong() {
-        long id = 222L;
-        String title = "This is the title";
-        String content = "This is some very interesting content.";
         // given
         Exception e = new Exception();
         given(wikiRepository.findById(233L)).willThrow(new InternalServerException("Could not retrieve wiki page (id " + 233 + ").", e));
@@ -95,5 +89,18 @@ class WikiServiceTest {
         then(wikiTagMapper).should().toDtoList(new ArrayList<>(List.of(wikitag)));
         then(wikiTagRelationRepository).should().findAllByPageId(id2);
         assertEquals(result.get(0), actual.get(0));
+    }
+
+    @Test
+    void create() {
+        long id = 420L;
+        String title = "This is the title";
+        String content = "This is some very interesting content.";
+        // given
+
+        WikiPageDto wikiPageDto = WikiPageDto.builder().id(id).title(title).content(content).build();
+        Long result = wikiService.createPage(wikiPageDto);        // when
+        // then
+        assertNull(result);
     }
 }

@@ -12,8 +12,9 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "client_id")
-    private Long clientId;
+    @ManyToOne
+    @JoinColumn(name = "client")
+    private Client client;
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
     @Column(name = "sliced")

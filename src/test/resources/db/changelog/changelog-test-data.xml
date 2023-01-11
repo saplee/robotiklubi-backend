@@ -11,5 +11,90 @@
             <column name="title" value="Some title"/>
             <column name="content" value="Some content"/>
         </insert>
+        <insert tableName="wiki">
+            <column name="id" value="87001"/>
+            <column name="title" value="Some title"/>
+            <column name="content" value="Some content"/>
+        </insert>
+        <insert tableName="wiki">
+            <column name="id" value="12345"/>
+            <column name="title" value="Some title"/>
+            <column name="content" value="Some content"/>
+        </insert>
+        <insert tableName="wiki">
+            <column name="id" value="34000"/>
+            <column name="title" value="New title"/>
+            <column name="content" value="New content"/>
+        </insert>
+        <insert tableName="wiki_tags">
+            <column name="id" value="3"/>
+            <column name="tag" value="Game"/>
+        </insert>
+        <insert tableName="wiki_tags">
+            <column name="id" value="66"/>
+            <column name="tag" value="TV"/>
+        </insert>
+        <insert tableName="wiki_tags">
+            <column name="id" value="900"/>
+            <column name="tag" value="Salami"/>
+        </insert>
+        <insert tableName="wiki_tags">
+            <column name="id" value="77"/>
+            <column name="tag" value="Mapper"/>
+        </insert>
+        <insert tableName="wiki_tag_relations">
+            <column name= "id" value ="900"/>
+            <column name= "page_id" value ="87000"/>
+            <column name= "tag_id" value ="3"/>
+        </insert>
+        <insert tableName="wiki_tag_relations">
+            <column name= "id" value ="899"/>
+            <column name= "page_id" value ="12345"/>
+            <column name= "tag_id" value ="77"/>
+        </insert>
+        <insert tableName="wiki_tag_relations">
+            <column name= "id" value ="656"/>
+            <column name= "page_id" value ="12345"/>
+            <column name= "tag_id" value ="3"/>
+        </insert>
+        <insert tableName="users">
+            <column name= "id" value ="8000"/>
+            <column name= "firstname" value ="K"/>
+            <column name= "lastname" value ="K"/>
+            <column name= "email" value ="k.k@mail.ee"/>
+            <column name= "password" value ="$2a$13$LvhI77t5b61QGn3KnQIFweyAlayCi5hJ4h9D4I0lOJc./F38FYbkC"/>
+            <column name= "role" value ="2"/>
+        </insert>
+        <insert tableName="users">
+            <column name= "id" value ="80000"/>
+            <column name= "firstname" value ="K"/>
+            <column name= "lastname" value ="K"/>
+            <column name= "email" value ="k.kfdsf@mail.ee"/>
+            <column name= "password" value ="$2a$13$LvhI77t5b61QGn3KnQIFweyAlayCi5hJ4h9D4I0lOJc./F38FYbkC"/>
+            <column name= "role" value ="2"/>
+        </insert>
+        <insert tableName="wiki">
+            <column name="id" value="123"/>
+            <column name="title" value="New title"/>
+            <column name="content" value="New content"/>
+        </insert>
+        <insert tableName="wiki_tags">
+            <column name="id" value="55"/>
+            <column name="tag" value="K"/>
+        </insert>
+        <insert tableName="wiki_tags">
+            <column name="id" value="56"/>
+            <column name="tag" value="T"/>
+        </insert>
+        <insert tableName="wiki_tag_relations">
+            <column name= "id" value ="9000"/>
+            <column name= "page_id" value ="123"/>
+            <column name= "tag_id" value ="55"/>
+        </insert>
+        <insert tableName="wiki_tag_relations">
+            <column name= "id" value ="9001"/>
+            <column name= "page_id" value ="123"/>
+            <column name= "tag_id" value ="56"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>
