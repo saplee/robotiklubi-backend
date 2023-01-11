@@ -33,6 +33,8 @@ class WikiServiceTest {
     private WikiRepository wikiRepository;
     @Mock
     private WikiTagRelationRepository wikiTagRelationRepository;
+    @Mock
+    private UserRepository userRepository;
     @Spy
     private final WikiPageMapper wikiPageMapper = new WikiPageMapperImpl();
     @Spy
@@ -97,9 +99,10 @@ class WikiServiceTest {
         String title = "This is the title";
         String content = "This is some very interesting content.";
         // given
-
+        given(userRepository.findById(2L)).willReturn(Optional.of(new User()));
+        // when
         WikiPageDto wikiPageDto = WikiPageDto.builder().id(id).title(title).content(content).build();
-        Long result = wikiService.createPage(wikiPageDto);        // when
+        Long result = wikiService.createPage(wikiPageDto, "2");        // when
         // then
         assertNull(result);
     }

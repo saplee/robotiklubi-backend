@@ -1,19 +1,13 @@
 package ee.taltech.iti0302.robotiklubi.test.unit.service;
 
 import ee.taltech.iti0302.robotiklubi.dto.user.UserDto;
-import ee.taltech.iti0302.robotiklubi.dto.wiki.TagDto;
-
-import ee.taltech.iti0302.robotiklubi.dto.wiki.WikiPageDto;
 
 
-import ee.taltech.iti0302.robotiklubi.exception.InternalServerException;
 import ee.taltech.iti0302.robotiklubi.mappers.user.UserMapper;
 import ee.taltech.iti0302.robotiklubi.mappers.user.UserMapperImpl;
-import ee.taltech.iti0302.robotiklubi.mappers.wiki.*;
 import ee.taltech.iti0302.robotiklubi.repository.*;
 
 import ee.taltech.iti0302.robotiklubi.service.UserService;
-import ee.taltech.iti0302.robotiklubi.service.WikiService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -35,12 +28,8 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private WikiTagRelationRepository wikiTagRelationRepository;
     @Spy
     private final UserMapper userMapper = new UserMapperImpl();
-    @Spy
-    private final WikiTagMapper wikiTagMapper = new WikiTagMapperImpl();
 
     @InjectMocks
     private UserService userService;
